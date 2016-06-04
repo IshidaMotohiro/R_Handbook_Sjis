@@ -1,0 +1,63 @@
+\documentclass{jsarticle}
+\usepackage[dvipdfmx]{graphics}
+% \usepackage{ascmac}
+\begin{document}
+\section {正規乱数の平均と分散 1}
+
+
+\begin{verbatim}
+チャンクオプション <<echo=TRUE>>
+\end{verbatim}
+コードと出力の両方を取り込む
+
+<<echo=TRUE>>=
+set.seed(123); x <- rnorm(100)
+mean(x); var (x)
+@
+すなわち平均\Sexpr{format(mean (x), digits = 2)}
+は分散\Sexpr{format(var (x), digits = 2)} です。
+
+\section {正規乱数の平均と分散 2}
+
+\begin{verbatim}
+チャンクオプション <<echo=TRUE,results=hide>>
+\end{verbatim}
+コードのみを取り込む
+
+<<echo=TRUE,results=hide>>=
+set.seed(123); x <- rnorm(100)
+mean(x); var (x)
+@
+\section {正規乱数の平均と分散 3}
+\begin{verbatim}
+チャンクオプション <<echo=FALSE>>
+\end{verbatim}
+出力のみを取り込む
+
+<<echo=FALSE>>=
+set.seed(123); x <- rnorm(100)
+mean(x); var (x)
+@
+
+画像を作成する
+\begin{figure}[h]
+\begin{center}
+\setkeys{Gin}{width=1.0\textwidth}
+<<echo=TRUE,fig=TRUE,width=7,height=4>>=
+hist(x)
+@
+\caption{$x$のヒストグラム}
+\label{fig1}
+\end{center}
+\end{figure}
+
+表の作成
+\begin{center}
+<<echo=FALSE,results=tex>>=
+library (xtable)
+xtable (summary (cars),
+caption = "頻度表",
+label = "table1")
+@
+\end{center}
+\end{document}

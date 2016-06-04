@@ -1,0 +1,93 @@
+\documentclass{jsarticle}
+\usepackage[dvipdfmx]{graphics}
+% \usepackage{ascmac}
+\usepackage{Sweave}
+\begin{document}
+\section {正規乱数の平均と分散 1}
+
+
+\begin{verbatim}
+チャンクオプション <<echo=TRUE>>
+\end{verbatim}
+コードと出力の両方を取り込む
+
+\begin{Schunk}
+\begin{Sinput}
+> set.seed(123); x <- rnorm(100)
+> mean(x); var (x)
+\end{Sinput}
+\begin{Soutput}
+[1] 0.09040591
+\end{Soutput}
+\begin{Soutput}
+[1] 0.8332328
+\end{Soutput}
+\end{Schunk}
+すなわち平均0.09
+は分散0.83 です。
+
+\section {正規乱数の平均と分散 2}
+
+\begin{verbatim}
+チャンクオプション <<echo=TRUE,results=hide>>
+\end{verbatim}
+コードのみを取り込む
+
+\begin{Schunk}
+\begin{Sinput}
+> set.seed(123); x <- rnorm(100)
+> mean(x); var (x)
+\end{Sinput}
+\end{Schunk}
+\section {正規乱数の平均と分散 3}
+\begin{verbatim}
+チャンクオプション <<echo=FALSE>>
+\end{verbatim}
+出力のみを取り込む
+
+\begin{Schunk}
+\begin{Soutput}
+[1] 0.09040591
+\end{Soutput}
+\begin{Soutput}
+[1] 0.8332328
+\end{Soutput}
+\end{Schunk}
+
+画像を作成する
+\begin{figure}[h]
+\begin{center}
+\setkeys{Gin}{width=1.0\textwidth}
+\begin{Schunk}
+\begin{Sinput}
+> hist(x)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{Sweave-004}
+\caption{$x$のヒストグラム}
+\label{fig1}
+\end{center}
+\end{figure}
+
+表の作成
+\begin{center}
+% latex table generated in R 3.3.0 by xtable 1.8-2 package
+% Sat Jun 04 16:08:34 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rll}
+  \hline
+ &     speed &      dist \\ 
+  \hline
+1 & Min.   : 4.0   & Min.   :  2.00   \\ 
+  2 & 1st Qu.:12.0   & 1st Qu.: 26.00   \\ 
+  3 & Median :15.0   & Median : 36.00   \\ 
+  4 & Mean   :15.4   & Mean   : 42.98   \\ 
+  5 & 3rd Qu.:19.0   & 3rd Qu.: 56.00   \\ 
+  6 & Max.   :25.0   & Max.   :120.00   \\ 
+   \hline
+\end{tabular}
+\caption{頻度表} 
+\label{table1}
+\end{table}\end{center}
+\end{document}

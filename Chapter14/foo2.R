@@ -1,0 +1,5 @@
+args <- commandArgs(TRUE)
+for (i in args ) print (i)
+x <- rnorm(1000)
+mean(x); sd(x)
+hist(x, main = args[3])

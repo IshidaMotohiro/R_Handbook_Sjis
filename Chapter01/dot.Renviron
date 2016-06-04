@@ -1,0 +1,7 @@
+# 「.Renviron」の設定 Windows
+R_LIBS_USER=C:/Users/MyNAME/Rlibs
+# R_LIBS_SITE=C:/Program Files/R/R-2.14.1/library
+
+# 「.Renviron」の設定 Mac
+R_LIBS_USER=/Users/MyNAME/Rlibs
+R_LIBS_SITE=/Library/Frameworks/R.framework/Version/2.1*/Resources/library
