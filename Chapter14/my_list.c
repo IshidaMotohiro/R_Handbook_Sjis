@@ -1,7 +1,7 @@
 
 /* リストを作成する my_list.c */
 #include <R.h>
-#include <Rinternals.h>
+#include <Rdefines.h>
 SEXP myList (SEXP x, SEXP y, SEXP z){
   SEXP my_list , my_listnames;
   //リスト要素の名前とする文字列

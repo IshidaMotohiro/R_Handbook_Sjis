@@ -1,11 +1,11 @@
+# 第3版  2016年 06 月 22 日
 
-# 改訂第3版  2016年3月11日
 
 ############################################################
 #                第12章  基本グラフィックス                #
 ############################################################
 
-  ## ----- SECTION 171  グラフィックスの基礎知識
+  ## ----- SECTION 174  グラフィックスの基礎知識
 
 library(help = "grDevices")
 ?Devices
@@ -13,7 +13,7 @@ library(help = "grDevices")
 
 
 
-  ## ----- SECTION 172  グラフ領域を設定する
+  ## ----- SECTION 175 グラフ領域を設定する
 
 # デフォルトの外部マージン
 par("oma")
@@ -46,7 +46,7 @@ par (oldpar)
 
 
 
-  ## ----- SECTION 173 点と線を描画する
+  ## ----- SECTION 176 点と線を描画する
 # プロットを分割する
 par (mfrow = c (2,3) )
 # 点
@@ -68,7 +68,7 @@ dev.off ()
 
 
 
-  ## ----- SECTION 174  ダミーの（空白の）散布図を描く
+  ## ----- SECTION 177  ダミーの（空白の）散布図を描く
 # デフォルトのユーザー座標系を確認
 par()$usr
 
@@ -95,7 +95,7 @@ title (main = "メインタイトル", sub = "サブタイトル",
 
 
 
-  ## ----- SECTION 175 データ点を描く
+  ## ----- SECTION 178 データ点を描く
 # 空のwindowsデバイスを用意
 plot (x = 1:10, y = 1:10, type = "n")
 
@@ -109,7 +109,7 @@ text (6:10, 6:10, lab = as.character (6:10), col = 1:5,
 
 
 
-  ## ----- SECTION 176 日本語フォントを設定する
+  ## ----- SECTION 179 日本語フォントを設定する
 
 windowsFonts()
 ## $serif
@@ -131,9 +131,8 @@ quartzFonts (hiraGothic = rep("HiraKakuPro-W3", 4),
 plot (1:10, main = "ゴシック", family = "hiraGothic")
 plot (1:10, main = "明朝", family = "hiraMin")
 
-cairo_pdf("test.pdf")
-plot (1:10, main = "日本語", family = "MS Gothic")
-dev.off()
+# Linux (Ubuntu)
+plot (1:10, main = "タカオ明朝", family = "TakaoMincho")
 
 install.packages ("Cairo")
 library (Cairo)
@@ -181,7 +180,7 @@ setHook (packageEvent ("grDevices", "onLoad"),
 
 
 
-  ## ----- SECTION 177 線を描く
+  ## ----- SECTION 180 線を描く
 
 # 「各種プロット」
 # 画面を2行2列に分割
@@ -204,6 +203,8 @@ plot (c (1,6,2,7,3,8,4,9,5,10), cex.lab = 1.6, type = "l", lwd = 5)
 # 最後に上部余白にタイトルを描く
 title (main = list ("各種プロット", cex = 1.6), outer = TRUE)
 
+# 作図指定をいったんクリアする
+dev.off()
 
 # 「線種プロット」
 # 上部に大きめの余白を設定
@@ -223,7 +224,7 @@ plot (x = 0:4, y = 0:4, type = "n", cex.lab = 1.6)
 # 両端を丸める
 lines (c (1,3), c (1,1), lwd = 30, lend = 0) # "round"
 # 両端が矩形
-lines (c (1,3), c (2,2), lwd = 30,,lend = 1) # "butt"
+lines (c (1,3), c (2,2), lwd = 30, lend = 1) # "butt"
 # 矩形だが飛び出させた
 lines (c (1,3), c (3,3), lwd = 30, lend = 2) # "square"
 title (main = list ("線種その２", cex = 1.6), outer = TRUE)
@@ -238,11 +239,13 @@ plot (weight ~ height, women, cex = 1.8,
 lm1 <- lm (weight ~ height, data = women)
 abline (lm1, lwd = 5)
 
+# 作図指定をいったんクリア
+dev.off()
 
 
 
 
-  ## ----- SECTION 178 複雑な図形やグラフを簡単に描く
+  ## ----- SECTION 181 複雑な図形やグラフを簡単に描く
 # グリッド・パッケージを利用する
 library (grid)
 
@@ -299,10 +302,11 @@ gg2 <- grid.grab ()
 class (gg2)
 grid.draw (gg2)
 
+# 作画設定をクリアする
+dev.off ()
 
 
-
-  ## ----- SECTION 179  グリッド・オブジェクトを一括で表示する
+  ## ----- SECTION 182  グリッド・オブジェクトを一括で表示する
 # 縦と横の8割を指定した作図領域（viewport）を用意
 vp1 <- viewport (width = 0.8, height = 0.8,
                  xscale = c (0,10), yscale = c (0,10))
@@ -333,11 +337,10 @@ gt12 <- addGrob (gt1, gt2)
 # 作成されたオブジェクトをプロットする
 grid.draw (gt12)
 
+dev.off ()
 
 
-
-
-  ## ----- SECTION 180  凡例を表示する
+  ## ----- SECTION 183  凡例を表示する
 
 plot (1:10, main = "凡例１", pch = 1:10, cex = 2.2, cex.lab = 1.6, col = 1:10)
  # 凡例を追加
@@ -360,7 +363,7 @@ legend (1,10, legend = LETTERS [2:6], ncol = 2,
 
 
 
-  ## ----- SECTION 181 グラフに数式を表示する
+  ## ----- SECTION 184 グラフに数式を表示する
 # メインタイトルに数式を使う
 plot (1:10, main = expression (paste (mu == 0,", ", sigma == 1)),
       cex.main = 2.6)
@@ -385,7 +388,7 @@ legend ("left", cex = 1.8, title = expression (f(x) ==
 
 
 
-  ## ----- SECTION 182  グラフにジッターを加える
+  ## ----- SECTION 185  グラフにジッターを加える
 (x <- rep (1:5, each = 3))
 
 # このままだと重なってしまう（実際には15個の点がある）
@@ -406,7 +409,7 @@ rug (faithful$eruptions )
 
 
 
-  ## ----- SECTION 183 グラフを分割する
+  ## ----- SECTION 186 グラフを分割する
 lm1 <- lm (weight ~ height, data = women)
 # 行方向にプロットを並べる
 par (mfrow = c (3, 3))
@@ -445,15 +448,12 @@ layout.show (nf3)
 
 
 
-  ## ----- SECTION 184 グラフを保存する
+  ## ----- SECTION 187 グラフを保存する
 
 # windowデバイスの保存
 plot (1:10, main = "あいうえお")
 # pdfファイルの作成。フォントファミリーの設定
 dev.copy2pdf (file = "aiueo1.pdf", family = "Japan1")
-
-dev.copy2pdf (file = "aiueoMS.pdf", family = "MS Gothic", out.type = "cairo")
-
 dev.copy2pdf (file = "aiueo1G.pdf", family = "Japan1GothicBBB")
 dev.copy2pdf (file = "aiueo1H.pdf", family = "Japan1HeiMin")
 # epsファイル
@@ -478,7 +478,7 @@ dev.off ()
 
 
 
-  ## ----- SECTION 185 対話的にデータ点を確認する
+  ## ----- SECTION 188 対話的にデータ点を確認する
 plot (1:10, pch = 1:10)
 
 # 3箇所の座標点を取得
@@ -496,7 +496,7 @@ text (locator (2), c ("あ", "ア"), cex = 1.6)
 
 
 
-  ## ----- SECTION 186 プロットの要素にカラーを設定する
+  ## ----- SECTION 189 プロットの要素にカラーを設定する
 plot(1:10, col = 1:10, cex = 14, pch = 16,
      main = "カラーの設定", col.main = "red",
      sub = "数値で指定できる", col.sub = "blue",
@@ -556,7 +556,7 @@ plot (1:10, cex = 14, pch = 16,
 
 
 
-  ## ----- SECTION 187 バーチャート（棒グラフ）を作成する
+  ## ----- SECTION 190 バーチャート（棒グラフ）を作成する
 # バージニア州の死亡率データ
 head (VADeaths)
 
@@ -582,8 +582,8 @@ title(main = "バージニア州での死亡率")
 
 
 #  3D 風のバーチャート
-# install.packages ("latticeExtra")
-
+# 
+install.packages ("latticeExtra")
 library (latticeExtra)
 
 cloud (VADeaths, panel.3d.cloud = panel.3dbars, col.facet = "lightblue", 
@@ -597,7 +597,7 @@ cloud (VADeaths, panel.3d.cloud = panel.3dbars, col.facet = "lightblue",
 
 
 
-  ## ----- SECTION 188  パイチャート（円グラフ）を作成する
+  ## ----- SECTION 191  パイチャート（円グラフ）を作成する
 
 # バージニア州の死亡率データ
 head (VADeaths)
@@ -622,7 +622,7 @@ pie3D (VADeaths[,1], col = rainbow (nrow (VADeaths)),
 
 
 
-  ## ----- SECTION 189 箱ひげ図を作成する
+  ## ----- SECTION 192 箱ひげ図を作成する
 # 餌の効果による鶏の体重増加効果
 # head (chickwts)
 x <- boxplot (weight ~ feed, data = chickwts)
@@ -643,7 +643,7 @@ boxplot (weight ~ feed, notch = TRUE, horizontal = TRUE, data = chickwts)
 
 
 
-  ## ----- SECTION 190 Clevelandのドットチャートを作成する
+  ## ----- SECTION 193 Clevelandのドットチャートを作成する
 
 dotchart (VADeaths, cex = 1.2, main = "バージニア州の死亡率")
 
@@ -651,7 +651,7 @@ dotchart (VADeaths, cex = 1.2, main = "バージニア州の死亡率")
 
 
 
-  ## ----- SECTION 191 ストリップチャートを作成する
+  ## ----- SECTION 194 ストリップチャートを作成する
 stripchart (decrease ~ treatment, vertical = TRUE, cex = 1.2,
             log = "y", data = OrchardSprays)
 

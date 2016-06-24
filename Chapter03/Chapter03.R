@@ -1,4 +1,4 @@
-# 改訂第3版　2016年2月16日
+# 第3版  2016年06月18日
 
 ############################################################
 #                   第3章 ベクトルの基礎                   #
@@ -77,6 +77,7 @@ typeof (xCom)
 # 1 + i だと i が別のオブジェクトとして扱われる
 (x <- 1+1i)
 
+
 # 複数の値をまとめて1つのオブジェクトに代入
 (y <- 1:10)
 
@@ -98,7 +99,7 @@ typeof (z)
 
 
 
-  ## ----- SECTION 026
+  ## ----- SECTION 026 規則性のある数列を作成する
 
 # 1から5までの自然数の数列をオブジェクトxに作成
 (x <- 1:5)
@@ -110,6 +111,8 @@ typeof (z)
 (y <- seq (5))
 # 「along.with」引数で指定された要素数となる数列を返す
 (x <- seq (10, 20, along.with = 1:5))
+     (x <- seq (10, 20, along.with = LETTERS)) # 26 個の実数を返す
+
 # 2つ間隔をおいた数列
 (x <- seq (1, 10, by = 2))
 # 公差をマイナス指定
@@ -140,6 +143,7 @@ sequence (c ("5", "2"))
 # オブジェクトの中身を繰り返す
 x <- c (1, 3, 7)
 rep (x, 3)
+
 # 同じだがR内部での処理が効率的
 rep.int (x, 3)
 # 全体の長さ 10 になるまで繰り返す
@@ -151,6 +155,15 @@ rep (1:3, times = 3)
 rep (1:3, length.out = 10, each = 3)
 # 1 を 5 回、10 を 1 回
 rep (c (1, 10), c (5, 1))
+
+# 正規乱数1000個を生成し
+z <- rnorm (1000)
+# これを1万回繰り返す
+(system.time (rep (z, 100000)))
+# 出力は環境によって異なります
+(system.time (rep.int (z, 100000)))
+# これらよりも高速
+(system.time (rep_len (z, 100000)))
 
 
 
@@ -196,7 +209,7 @@ z1 <- cut (z, breaks = quantile(z) )
 # 最小値が1個欠けた頻度が表示されている
 table (z1)
 
-# 最小値を含ませる
+# 最小値を含める
 z2 <- cut (z, breaks = quantile(z), include.lowest = TRUE)
 table(z2)
 
@@ -205,7 +218,7 @@ table(z2)
 z3 <- cut (z, breaks = quantile(z), right = FALSE )
 table (z3)
 
-# 最大値を含ませる
+# 最大値を含める
 z4 <- cut (z, breaks = quantile(z), include.lowest = TRUE,
      right = FALSE )
 table (z4)
@@ -343,6 +356,7 @@ all.equal (.1+.1+.1+.1+.1+.1+.1+.1+.1+.1, 1.0)
 
 # ただしif文では使わないこと
 all.equal (pi, 355/113)
+
 if (all.equal (pi, 355/113) ) print ("eqaul")
 
 # 「identical」関数を使う
@@ -357,13 +371,14 @@ all.equal (x3, x4)
 all.equal (x3, x4, tolerance = 0.5)
 
 (x <- 2.3 - 1.3)
+# 厳密には1ではない
 sprintf ("%.16f", x)
 
+# したがって「1と同じか大きい」とは判断されない
 if (x >= 1) print ("x >= 1") else print ("x < 1")
+# ifelse (x >= 1, "x >= 1", "x < 1") # 同じ処理
 
-
-ifelse (x >= 1, "x >= 1", "x < 1") # 同じ処理
-
+# このような場合に「zapsmall」が使えることがある
 if (zapsmall (x) >= 1) print ("x >= 1") else print ("x < 1")
 
 

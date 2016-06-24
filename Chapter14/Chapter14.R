@@ -1,6 +1,4 @@
-
-# 改訂第3版  2016年3月3日
-
+# 第3版  2016年 06 月 22 日
 
 ############################################################
 #                      第14章 Rの応用                      #
@@ -8,7 +6,7 @@
 
 
 
-  ## ----- SECTION 201  直前の処理結果を表示する
+  ## ----- SECTION 205  直前の処理結果を表示する
 
 # 直前の実行結果は自動的に保存される
 x <- 1:10
@@ -23,7 +21,7 @@ y
 
 
 
-  ## ----- SECTION 202  ガベージコレクションを実行する
+  ## ----- SECTION 206  ガベージコレクションを実行する
 
 # ガベージコレクションを行う
  gc ();gc ()
@@ -32,18 +30,18 @@ y
 
 
 
-  ## ----- SECTION 203  バッチ処理を実行する
+  ## ----- SECTION 207  バッチ処理を実行する
 
 # 以下はOSのターミナルで実行します
-R CMD BATCH --vanilla batch.R result.txt
+## R CMD BATCH --vanilla batch.R result.txt
 
 
 
 
 
-  ## ----- SECTION 204  Rの出力をLaTeXフォーマットに変換する
+  ## ----- SECTION 208  Rの出力をLaTeXフォーマットに変換する
 
-Sweave ("Sweave.Rnw", encoding = "CP932")
+Sweave ("Sweave.Rnw", encoding = "CP932") # ファイルの文字コードを指定。 Mac / Linux では "UTF-8" を指定
 
 ## 同封の Sewave.Rnw ファイルを利用して下さい
 ## % Sweave サンプル%
@@ -108,7 +106,7 @@ Sweave ("Sweave.Rnw", encoding = "CP932")
 
 
 
-  ## ----- SECTION 205  日付や時刻をデータとして扱う
+  ## ----- SECTION 209  日付や時刻をデータとして扱う
 # 「Date」クラスのオブジェクト
 as.Date ("2014-01-28")
 
@@ -198,7 +196,7 @@ Sys.setlocale("LC_TIME", lct)
 
 
 
-  ## ----- SECTION 206  コンソールの表示幅を調整する
+  ## ----- SECTION 210  コンソールの表示幅を調整する
 
 # 表示幅のデフォルトを確認
 options ("width")
@@ -218,7 +216,7 @@ options(opt)
 
 
 
-  ## ----- SECTION 207 集合演算を実行する
+  ## ----- SECTION 211 集合演算を実行する
 
 (x <- LETTERS [1:7] )
 
@@ -247,7 +245,7 @@ x [5]; is.element (x [5], y)
 
 
 
-  ## ----- SECTION 208  関数の最大化／最小化について
+  ## ----- SECTION 212  関数の最大化／最小化について
 
 like <- function (x) {
   function (p) {
@@ -287,7 +285,7 @@ optim (c (30,5), like2 (z), control = list (fnscale = -1))
 
 
 
-  ## ----- SECTION 209  オブジェクトのスコープを調べる
+  ## ----- SECTION 213  オブジェクトのスコープを調べる
 
 search () # 実行状況によって変化します
 
@@ -338,7 +336,7 @@ get ("pi", envir = globalenv(), inherits = FALSE )
 
 
 
-  ## ----- SECTION 210 環境を確認する
+  ## ----- SECTION 214 環境を確認する
 
 environment ()
 
@@ -346,17 +344,17 @@ sys.frame ()
 
  
 ################
-# 親環境と実行環境
+# 環境とフレーム
 func1 <- function (x) {
   cat ("func1の環境\n")
   print (environment ())
   cat ("func1の親環境\n")
   print (parent.env (environment ()) )
-  cat ("func1の環境番号\n")
+  cat ("func1のフレーム番号\n")
   print (sys.nframe())
-  cat ("func1の環境名\n")
+  cat ("func1のフレーム名\n")
   print (sys.frame (sys.nframe()))
-  cat ("func1の実行環境\n")
+  cat ("func1の親フレーム\n")
   print (parent.frame () )
   func2 (x) # ここで別の関数「func2」を呼び出す
 }
@@ -366,11 +364,11 @@ func2 <- function (x) {
   print (environment ())
   cat ("func2の親環境\n")
   print (parent.env (environment ()) )
-  cat ("func2の環境番号\n")
+  cat ("func2のフレーム番号\n")
   print (sys.nframe())
-  cat ("func2の環境名\n")
+  cat ("func2のフレーム名\n")
   print (sys.frame (sys.nframe()))
-  cat ("func2の実行環境\n")
+  cat ("func2の親フレーム\n")
   print (parent.frame () )
   func3 (x) # ここで別の関数「func3」を呼び出す
 }
@@ -380,11 +378,11 @@ func3 <- function(x) {
   print (environment ())
   cat ("func3の親環境\n")
   print (parent.env (environment ()) )
-  cat ("func3の環境番号\n")
+  cat ("func3のフレーム番号\n")
   print (sys.nframe())
-  cat ("func3の環境名\n")
+  cat ("func3のフレーム名\n")
   print (sys.frame (sys.nframe()))
-  cat ("func3の実行環境\n")
+  cat ("func3の親フレーム\n")
   print (parent.frame () )
   return (x)
 }
@@ -419,7 +417,7 @@ get ("inZ", pos = "z")
 
 
 
-  ## ----- SECTION 211  グローバル・オブジェクトに代入する
+  ## ----- SECTION 215  環境を指定してオブジェクトに代入する
 
 x <- 0
 
@@ -451,21 +449,32 @@ func3 ()
 
 x
 
+# ただし入れ子の途中に同じオブジェクトがある場合
+func4 <- function () {
+  x <- "func4" # func4関数内部で定義した x
+  (function () {x <<- 3.14})() # 無名関数を使ってグローバル環境の x を変更したい
+  print (x) # func4 内部のxは3.14 に変更されるが
+}
+x <- 0 # グローバル環境のオブジェクトを再定義
+func4 ()
 
-x <- 1
-# 関数内で複数の x が入れ子になっている場合，
-# 入れ子の奥で <<- 演算子を使っても，その上のxが変更されるだけで
-# グローバル環境の x は変更されない
-(function() { x <- 2; (function() x <<- 3)(); print(x) })(); x
-# このような場合は
-(function() { x <- 2; (function() assign("x", 3, globalenv()))(); print(x) })(); x
-# とする
+x # 変更されていない
+
+# このような場合は assign 関数と globalenv 関数を使う
+func5 <- function () {
+  x <- "func5"
+  (function () {assign("x", 3.14, globalenv())})()
+  print (x) # 無名関数によって3.14 に変更される
+}
+x <- 0 # グローバル環境のオブジェクトを再定義
+func5 ()
+x # 変更されている
 
 
 
 
 
-  ## ----- SECTION 212 デバッグを実行する
+  ## ----- SECTION 216 デバッグを実行する
 
 func <- function (x) {
   a <- x
@@ -500,6 +509,7 @@ traceback ()
 
 debug (func1)
 func1 (y)
+
 
 undebug (func1)
 
@@ -539,14 +549,24 @@ untrace (func4)
 
 
 
+  ## ----- SECTION 217  R本体のデバッグ(C言語ソースを追う)
 
-  ## ----- SECTION 213   コードの実行速度を確認する
+vector 
+length
+
+install.packages ("pryr")
+library(pryr)
+show_c_source(.Internal(length(x)))
+
+
+
+  ## ----- SECTION 218   コードの実行速度を確認する
 system.time ({x <- rnorm (100000); mean(x)})
 
 #install.packages ("rbenchmark")
 library (rbenchmark)
 
-benchmark ({x <- rnorm (100000); mean(x)},  replications = 1000)
+benchmark ({x <- rnorm (100000); mean(x)})# replications = 1000 
 
 # 出力のtest欄は「｛」と、コードをまとめる波括弧になってしまっていますが
 # 実行結果の出力に問題はありません
@@ -569,16 +589,10 @@ within (
 
 
 
-x <- data.frame(a = 1:3, b = 11:13, c = 21:23)
-
-tmp <- with (x, a + b + c)
-str (tmp)
-
-tmp2 <- within (x, a + b + c)
-str (tmp2)
 
 
-  ## ----- SECTION 214   パッケージを作成する
+
+  ## ----- SECTION 219   パッケージを作成する
 func <- function(x) {
   cat ("func内部\n")
   return (x + 1)
@@ -601,7 +615,7 @@ file.show ("x.Rd")
 
 
 
-  ## ----- SECTION 215  S3クラスを定義する
+  ## ----- SECTION 220  S3クラスを定義する
 
 (x <- data.frame (x1 = 1:3, x2 = 10) )
 
@@ -635,7 +649,7 @@ getAnywhere (print.temp)
 
 
 
-  ## ----- SECTION 216   S4クラスを定義する
+  ## ----- SECTION 221   S4クラスを定義する
 
 #「family」クラスを定義
 family <- setClass ("family", representation (mother = "character",
@@ -681,8 +695,8 @@ setGeneric ("member", useAsDefault = function (x) {print (x@father)})
 # デフォルトのメソッドを利用している
 member (chld1)
 
- # 「family2」オブジェクトに「member」オブジェクトが
- # 適用された場合のメソッドを改めて定義
+# 「family2」オブジェクトに「member」オブジェクトが
+# 適用された場合のメソッドを改めて定義
 setMethod ("member", signature (x = "family2" ),
            def = function (x) {
              print (c (x@father, x@mother, x@childNames))
@@ -737,7 +751,7 @@ chld1
 
 
 
-  ## ----- SECTION 217   ReferenceClassを定義する
+  ## ----- SECTION 222   ReferenceClassを定義する
 
 # helloクラスを定義
 hello <- setRefClass ("myS5",
@@ -772,46 +786,51 @@ hello$methods ()
 
 # オブジェクトを初期化
 obj1 <- hello$new ()
+# obj1 <- hello() も可(R 3.0.0以降)
 
 # メソッドの説明を参照する
 hello$help ("reply")
+
+
 # 実行してみる
 obj1$reply ()
 
 # メソッドの説明を参照する
 hello$help ("change")
+
 # 実行して変更を確認
 obj1$change ("鈴木")
 obj1$reply ()
-
-
 # アクセッサーを追加
 hello$accessors ("name")
 
 # メソッドの一覧を再表示する
 hello$methods ()
+
 # アクセッサーを使ってみる
-obj1$getName ()
-# アクセッサーを使って「Name」フィールドを変更
+ obj1$getName ()
+
+ 
+# アクセッサーを使って「Name」フィール
 obj1$setName ("佐藤")
 obj1$reply ()
 
 # メソッドを追加
 hello$methods (
-               message = function (toYou) {
-                   "初対面の挨拶を返す"
-                 cat (toYou, "さん，初めまして\n")
-               } )
+  message = function (toYou) {
+    "初対面の挨拶を返す"
+    cat (toYou, "さん，初めまして\n")
+  })
 
 # メソッドの説明を参照する
 hello$help ("message")
 
+# メソッドを実行
 obj1$message ("後藤")
 
 # 名前を指定して初期化
 obj2 <- hello$new("山田")
 obj2$reply()
-
 
 # 参照クラスのオブジェクトをコピーする
 obj3 <- obj1
@@ -831,19 +850,41 @@ obj4$reply()
 
 # 「obj1」の「Name」フィールドを変更してみる
 obj4$setName ("釘宮")
-obj4$reply()
 
 # コピーもとの「obj1」の「Name」フィールドに新たな変更は及んでいない
-obj1$reply()              
+obj1$reply()
 
 
 
 
+  ## ----- SECTION 223   R コマンダー
+
+install.packages ("Rcmdr")
+library (Rcmdr)
 
 
 
 
-  ## ----- SECTION 220   日本語テキストを解析する
+  ## ----- SECTION 224   Excel から R を利用
+
+install.packages(c("rscproxy", "rcom"),
+                 repos="http://rcom.univie.ac.at/download", lib = .Library)
+library(rcom)
+comRegisterRegistry()
+
+
+install.packages(c("Rcmdr", "RcmdrPlugin.HH"),
+                 lib = .Library, dependencies = TRUE);
+# Rcmdrの不足パッケージを追加
+library(Rcmdr) # 画面の指示に従ってインストール
+# さらに以下を入力
+install.packages(c("RcmdrPlugin.mosaic", "ENmisc"),
+                 lib = .Library, dependencies = TRUE);
+
+
+
+
+  ## ----- SECTION 225   日本語テキストを解析する
 
 # http://mecab.sourceforge.net/ より MeCab0.996をダウンロードしてインストール
 # http://rmecab.jp/wiki/index.php?RMeCab
@@ -870,7 +911,97 @@ browseURL("http://rmecab.jp/wiki/index.php?RMeCabFunctions")
 
 
 
-  ## ----- SECTION 221 Emacs でのRの利用
+
+  ## ----- SECTION  226  欧米語のテキストマイニング
+
+## install.packages("tm")
+
+library (tm)
+
+(txt <- system.file ("texts", "txt", package = "tm"))
+
+(ovid <- VCorpus (DirSource (txt),
+                 readerControl = list (language = "lat")))
+
+texts <- c ("Alice was beginning to get very tired of sitting by her sister on the bank,",
+            "and of having nothing to do:")
+Alice <- VCorpus (VectorSource (texts))
+
+Alice # print (Alice)に同じ
+
+summary (Alice)
+
+inspect (Alice)
+
+as.character (Alice [[1]])
+
+lapply (Alice, as.character)
+
+reut21578 <- system.file("texts", "crude", package = "tm")
+#  install.packages ("XML") # 必要であればインストール
+
+
+reuters <- VCorpus (DirSource(reut21578),
+                  readerControl = list(reader = readReut21578XMLasPlain))# 
+inspect (reuters)
+
+tm_filter(reuters , FUN = function (x) any (grep ("co[mn]?pany", context(x))))
+
+
+reuters <- tm_map (reuters, stripWhitespace)
+reuters <- tm_map (reuters, content_transformer(tolower))
+
+
+reuters <- tm_map (reuters, removeWords, stopwords("english"))
+reuters <- tm_map (reuters, stemDocument)
+
+as.character (reuters [[1]])
+
+dtm <- DocumentTermMatrix (reuters)
+inspect (dtm[1:5, 100:105])
+
+findAssocs (dtm, "opec", 0.8)
+
+
+inspect (removeSparseTerms (dtm, 0.4))
+
+
+
+ inspect (DocumentTermMatrix (reuters, list (dictionary  = c ("prices", "crude", "oil"))))
+
+
+ 
+   ## ----- SECTION  227  「tm」パッケージで日本語文書行列を操作する
+
+ library (RMeCab)
+ x <- docMatrix2 ("doc")
+ 
+ 
+ # install.packages("slam") # 必要ならばインストール
+ library(slam)
+ x.sparse <- as.simple_triplet_matrix( t(x) ) # 転置してから変換
+ 
+ x.sparse2 <- as.DocumentTermMatrix (x.sparse, weighting = weightTf ) 
+ library (tm)
+ inspect (x.sparse2 [1:3, ] ) # 1-3行目を確認
+ 
+ # 6割の文書で出現しているタームを残す
+ inspect(removeSparseTerms(x.sparse2, 0.4))
+ 
+ # 行列の相関係数をもとに抽出
+ findAssocs(x.sparse2, "数学", 0.3)
+ 
+ # install.packages("topicmodels")
+ library (topicmodels)
+ x.sparse <- as.simple_triplet_matrix( t(x) ) # 転置してから変換
+ x.sparse2 <- as.DocumentTermMatrix (x.sparse, weighting = weightTf ) #
+ topic.mod <- LDA(x.sparse2, control = list(alpha = 0.1), k = 5)
+ getterms (topicmod)
+ 
+ 
+
+
+  ## ----- SECTION 228 Emacs でのRの利用
 
 
 (require 'package)
@@ -906,7 +1037,7 @@ browseURL("http://rmecab.jp/wiki/index.php?RMeCabFunctions")
 
 
 
-  ## ----- SECTION 222  C言語との連携について
+  ## ----- SECTION 229  C言語との連携について
 
 ## 同封のファイル simple.c  を利用して下さい
 /* もっとも単純な方法 simple.c */
@@ -1035,7 +1166,7 @@ dyn.unload ("df_make.dll")
 
 
 
-  ## ----- SECTION 223   「Rcpp」パッケージについて
+  ## ----- SECTION 230   「Rcpp」パッケージについて
 
 install.packages ("Rcpp")
 library (Rcpp)
@@ -1068,9 +1199,9 @@ x
 /* RcppList.cpp ソースファイル */
 #include <Rcpp.h>
 RcppExport SEXP test (SEXP x, SEXP y, SEXP z){
-return Rcpp::List::create(Rcpp::Named("string") = x,
-Rcpp::Named("integer") = y,
-Rcpp::Named("numeric") = z);
+  return Rcpp::List::create(Rcpp::Named("string") = x,
+       Rcpp::Named("integer") = y,
+       Rcpp::Named("numeric") = z);
 }
 
 同封のファイル RcppDataFrame.cpp  を利用して下さい
@@ -1078,12 +1209,12 @@ Rcpp::Named("numeric") = z);
 #include "Rcpp.h"
 using namespace Rcpp;
 RcppExport SEXP dfMake2 (SEXP x, SEXP y, SEXP z){
-CharacterVector cv = CharacterVector::create(as<std::string>(x),
-as<std::string>(y),
-as<std::string>(z));
-IntegerVector nv = IntegerVector::create(10,20,30);
-return DataFrame::create(Named("Name") = cv, Named ("Age") = nv,
-Named("stringsAsFactors") = false );
+   CharacterVector cv = CharacterVector::create(as<std::string>(x),
+                                                as<std::string>(y),
+                                                as<std::string>(z));
+   IntegerVector nv = IntegerVector::create(10,20,30);
+   return DataFrame::create(Named("Name") = cv, Named ("Age") = nv,
+                            Named("stringsAsFactors") = false );
 }
 
 ## 同封のファイル Makevars.win  を利用して下さい
@@ -1099,9 +1230,7 @@ fx <- cfunction (signature (x = "integer", y = "numeric" ) ,
 
 
 
-
-
-  ## ----- SECTION 224
+  ## ----- SECTION 231 関数のバイトコンパイル
 
 # 速度を確認するためベンチマーク用のパッケージを導入
 # install.packages ("rbenchmark")
@@ -1135,7 +1264,7 @@ benchmark (
 
 
 
-  ## ----- SECTION 225
+  ## ----- SECTION 232 並列処理について
 
 # install.packages ("simpleboot")
 library (simpleboot)
@@ -1189,10 +1318,13 @@ quantile (c (xbc [[1]]$t, xbc [[2]]$t,xbc [[3]]$t, xbc [[4]]$t))
 
 
 
-## ----- SECTION 226  単体テストを行なう
+  ## ----- SECTION 233  関数の単体テストを行なう
 
-#install.packages ("RUnit")
-library (RUnit)
+# install.packages("testthat", dependencies = TRUE)
+
+library(testthat)
+
+
 
 # 引数ベクトルの要素の掛け算を求める関数（のつもり）
 myProd <- function (x) {
@@ -1203,117 +1335,224 @@ myProd <- function (x) {
   return (tmp)
 }
 
-# 正しい解は
+# 正しい解は 3628800
 prod (1:10)
 
-# テストしてみる
-checkEqualsNumeric ( myProd (1:10), 3628800)
+## 誤った値を指定して検証してみる
+expect_equal (prod (1:10), 3628808)
 
 
-# 華氏を摂氏に変換 # 同封の tmp/runit.f2c.R を参照
-f2c <- function (f) return (5/9 * f - 32) # 正しくは 5/9 * (f - 32)
-## テスト関数
-## ---------------------
-test.f2c <- function () {
-  checkEquals (f2c(32), 0)     # 実行結果が理論値と異なる
-   checkException (f2c ("xx")) # 意図的に文字列を渡す
+devtools::use_testthat ()
+
+## このフォルダ内にあるsampleフォルダをRStudioのプロジェクトとして読み込んでください．
+## 具体的には，メニューの[File] -> [New Project] から [Existing Directory] を選び，Chapter04/sample フォルダを選択します
+
+context ("Hello World function")
+test_that ("check a string:",{
+  expect_match (hello (), "hello")
+} )
+
+devtools::test ()
+
+test_that ("check a string:",{
+  expect_match (hello (), "Hello, world!")
+} )
+
+lengthChar <- function (char) {
+  length (char)
 }
-# 例外時のメッセージ
-test.errordemo <- function () {
-  stop("不正な結果です")
+
+
+context ("lengthChar function")
+
+x <- "this is test."
+test_that ("check length of string:",{
+  expect_equal (lengthChar (x) , 13)
+} )
+
+lengthChar <- function (char) {
+  nchar (char)
 }
 
-
-# テスト用のフォルダに置いてテストスイーツとして読み込む
-testsuite.c2f <- defineTestSuite ("f2c",
-     dirs = "/home/ishida/tmp")
-
-# 実行する
-testResult <- runTestSuite (testsuite.c2f)
+devtools::test ()
 
 
-# 実行結果の表示
-printTextProtocol (testResult)
+   ## ----- SECTION 234  WEBスクレイピング  
 
-# testthat パッケージを利用する
-install.packages("testthat")
-
-
-## ----- SECTION WEBスクレイピング
+# install.pacakges ("rvest")
 library (rvest)
 # URIを直接指定できる
 x <- read_html ("http://rmecab.jp/R/sample.html")
 
 # //p という指定で、html内のPタグがすべて抽出される
- x %>% html_nodes (xpath = "//p") %>% html_text %>% iconv(from = "UTF-8")
+x %>% html_nodes (xpath = "//p") %>% html_text %>% iconv(from = "UTF-8")
 
- 
 # pタグのgreenクラスに指定された文字列
-x %>% html_nodes (xpath = "//p[@class = 'green']") %>% html_text () %>%  iconv (from = "UTF-8")
+x %>% html_nodes (xpath = "//p[@class = 'green']") %>% html_text () %>% 
+  iconv (from = "UTF-8")
 
 # 上の略記
- x %>% html_nodes (".green") %>% html_text () %>%  iconv (from = "UTF-8")
+x %>% html_nodes (".green") %>% html_text () %>% 
+  iconv (from = "UTF8")
 
- # divタグ
- x %>% html_nodes ("div") %>% html_text() %>%  iconv(from = "UTF-8")
+# pタグのredアイディーに指定された文字列
+x %>% html_nodes (xpath = "//p[@id = 'red']") %>% html_text () %>% 
+  iconv (from = "UTF-8")
+
+# その略記
+x %>% html_nodes ("#red") %>% html_text () %>% 
+  iconv (from = "UTF-8")
+
+
+# divタグ
+x %>% html_nodes ("div") %>% html_text () %>% 
+  iconv (from = "UTF-8")
 
 # divタグの入れ子になったdivタグの値
- x %>% html_nodes (".inDiv") %>% html_text() %>%  iconv (from = "UTF-8")
-# 別の指定方法
-x %>% html_nodes ("#divRoot .inDiv") %>% html_text() %>%  iconv (from = "UTF-8")
+x %>% html_nodes (".inDiv") %>% html_text () %>% 
+  iconv (from = "UTF-8")
 
-#  Spanタグ内のtitleに設定された値を取る
-x %>% html_nodes (".inSpan") %>% html_attr ("title") %>%  iconv (from = "UTF-8")
+
+# 別の指定方法
+x %>% html_nodes ("#divRoot .inDiv") %>% html_text () %>% 
+  iconv (from = "UTF-8")
+
+# Spanタグ内のtitleに設定された値を取る
+x %>% html_nodes (".inSpan") %>% html_attr ("title") %>% 
+  iconv (from = "UTF-8")
+
 
 # その別の方法
-x %>% html_nodes ("#divRoot li span.inSpan") %>% html_attr ("title") %>%  iconv (from = "UTF-8")
+x %>% html_nodes ("#divRoot li span.inSpan") %>% html_attr("title") %>% 
+  iconv (from = "UTF-8")
 
 # html 内にあるtableがすべて取り出され、リストとして返される
-x %>% html_table () %>% `[[`(1) 
+x %>% html_table %>% `[[`(1) 
 
 # クラスを指定(Windowsでは文字化け)
-x %>% html_node (".myTable") %>% html_table ()
+x %>% html_node (".myTable") %>% html_table
 
 # 表の属性を取り出す
-x %>% html_node (".myTable") %>% html_attr  ("border")
+x %>% html_node (".myTable") %>% html_attr ("border")
 
-# 表の属性を取り出す
-x %>% html_node(".myTable") %>% html_attr ("border")
 
 ## 文字化け対策
 library (readr)
 
-# ただし列名は化ける
-x %>% html_node (".myTable") %>% html_table  () %>% type_convert ()
+# 列名は化ける
+x %>% html_node(".myTable") %>% html_table %>% type_convert ()
 
-# 予め列名だけ変換しておくか、そもそも日本語を使わない(後者推奨)
-x2 <- x %>% html_node (".myTable") %>% html_table ()
+# あらかじめ列名だけ変換しておくか、そもそも日本語を使わない(後者推奨)
+x2 <- x %>% html_node (".myTable") %>% html_table 
+colnames (x2) <- iconv (colnames (x2), from = "UTF-8")
+x2 %>% typeconvert
 
-colnames(x2) <- iconv (colnames(x2), from = "UTF-8")
 
-x2 %>% type_convert
+# 以下はラムダ記法を応用している（341ページ参照）
+x %>% html_node (".myTable") %>% html_table %T>% {
+  colnames (.) <- iconv (colnames (.) , from = "UTF-8")
+}%>% readr::type_convert ()
 
-# 以下はラムダ記法を応用している
-x %>% html_node (".myTable") %>% html_table () %T>% {
-  colnames(.) <- iconv(colnames(.) , from = "UTF-8")
-  } %>% type_convert()
 
-# WEB地図を描く
-source ("http://linkdata.org/api/1/rdf1s2679i/R")
+# WEB地図の作成
+# LinkData からデータを取得
 
+source("http://linkdata.org/api/1/rdf1s2679i/R")
+
+# 「leaflet」パッケージを利用
+install.packages ("leaflet")
 library (leaflet)
-Hakone_tozen_railway_train_station %>%   leaflet()  %>% addTiles () %>% addMarkers ( ~ long, ~lat, popup =~ station)
+Hakone_tozen_railway_train_station %>% leaflet %>% addTiles () %>% 
+  addMarkers ( ~ long, ~ lat, popup =~ station)
+
+## JSONやXMLデータの取得
+
+library (xml2)
+x <- read_xml ("https://u10sme-api.smrj.go.jp/v1/prefectures.xml")
+x
+
+# 「xml_find」関数にxpathを指定して、そのノードの要素を取り出す
+xml_find_one (x, "//name") %>% xml_text
+
+xmlfindall (x "//name") %>% xmltext
+
+install.packages ("jsonlite")
+library (jsonlite)
+j <- fromJSON ("https://u10sme-api.smrj.go.jp/v1/prefectures.json")
+names (j)
+names (j)
+
+class (j$prefectures)
+
+j$prefectures
 
 
 
-f <-  function() 
-  c(f=environment(),
-    defined_in=parent.env(environment()),  
-    called_from=parent.frame())
+  ## ----- SECTION 235  「Shiny」パッケージでWEBアプリケーションを作成する
 
-g <- function() 
-  c(g=environment(), f())
 
-f()
+install.packages ("shiny")
 
-g()
+
+# ui.R
+library(shiny)
+shinyUI(fluidPage(
+  # Application title
+  titlePanel("Old Faithful Geyser Data"),
+  # Sidebar with a slider input for number of bins
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("bins", # スライダー部品に「bins」という名前を付けた
+                  "Number of bins:",
+                  min = 1,
+                  max = 50,
+                  value = 30)
+    ),
+    # Show a plot of the generated distribution
+    mainPanel(
+      plotOutput("distPlot") # プロットに「distPlot」という名前を付けた
+    )
+  )
+))
+
+# server.R
+library(shiny)
+shinyServer(function(input, output) {
+  output$distPlot <- renderPlot({
+    # generate bins based on input$bins from ui.R
+    x <- faithful[, 2]
+    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    # draw the histogram with the specified number of bins
+    hist(x, breaks = bins, col = 'darkgray', border = 'white')
+  })
+})
+
+
+
+
+# ui.R その2
+library(shiny)
+shinyUI(fluidPage(
+  # Application title
+  titlePanel("Old Faithful Geyser Data"),
+  # Sidebar with a slider input for number of bins
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("bins", # スライダー部品に「bins」という名前を付けた
+                  "Number of bins:",
+                  min = 1,
+                  max = 50,
+                  value = 30),
+        # ラジオボタンを追加 
+        radioButtons("radio", label = h3("Select color"),
+                     choices = list("black" = 1, "red" = 2,
+                                    "green" = 3), selected = 1)
+    ),
+    
+    # Show a plot of the generated distribution
+    mainPanel(
+      plotOutput("distPlot") # プロットに「distPlot」という名前を付けた
+    )
+  )
+))
+

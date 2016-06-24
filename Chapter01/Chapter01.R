@@ -1,5 +1,4 @@
-
-#  改訂第3版　2016年2月15日
+# 第3版    2016年06月19日
 
 ############################################################
 #                    第１章 R言語の基礎                    #
@@ -7,25 +6,29 @@
 
 
   ## ----- SECTION 004  Rコンソールとスクリプトの実行
- # コンソールのプロンプトを変更する
- # 現在のプロンプトを確認する
+# コンソールのプロンプトを変更する
+# 現在のプロンプトを確認する
 options ("prompt")
 
 # デフォルトの表示
 plot (1:10, 1:10,
 main = "プロンプト変更前")
- # プロンプトを変更する
-options (prompt = "ishida: ")
 
-op <- options (prompt = "ishida: ")
-options (continue = "put: ")
+
+
+# プロンプトを変更する
+op <- options (prompt = "ishida> ", continue  = "put+")
 
 # プロンプトを変更
 plot (1:10, 1:10,
       main = "プロンプト変更後")
 
 
-options(op) # ともに戻す
+options(op) # もとに戻す
+
+# 履歴の保存件数(.Rprofileで設定されていれば表示)
+Sys.getenv("R_HISTSIZE")
+
 
 
 
@@ -33,7 +36,7 @@ options(op) # ともに戻す
 
 ## # 「.Renviron」の設定# 同封ファイルdot.Renvironを参照して下さい
 ## R_LIBS_USER=C:/Users/ishida/Documents/R/win-library/2.15
-## R_LIBS_SITE=C:/Program Files/R/R-2.12.1/library
+## R_LIBS_SITE=C:/Program Files/R/R-3.1.0/library
 
 
 ## # 「.Rprofile」の設定# 同封ファイルdot.Rprofileを参照して下さい
@@ -54,6 +57,7 @@ options(op) # ともに戻す
 
 
 
+as.data.frame(Sys.getenv())
 
 
 
@@ -85,13 +89,21 @@ options (scipen = 3)
 # 「lattice」パッケージを追加
 options (defaultPackages = c (x, "lattice"))
 
+# デフォルトのcranミラーを設定
+#  これによりインストール時にサーバーを指定する必要がなくなる
+
+options(repos = "https://cran.ism.ac.jp")
+
+
 
 
 
   ## ----- SECTION 008 作業フォルダの設定
 
-getwd()
-setwd(C:/workhome)
+read.csv ("Chapter01/myData.csv")
+getwd ()
+setwd ("C:/Users/Ishida/Documents/R_Handbook_***/Chapter01/myData.csv")# Windows
+setwd ("/Users/Ishida/Documents/R_Handbook_UTF8") # Mac OS X 
 
 
 
@@ -105,11 +117,33 @@ apropos ("chi", mode = "function")
 find ("^chi", simple.words = FALSE)
 
 
+
+  ## ----- SECTION 010  Rの統合環境「RStudio」を使う
+
+dice <- function (x) {
+  tmp <- sample(1:6, x, replace = TRUE)
+   hist(tmp)
+}
+
   ## ----- SECTION 011  パッケージのインストール
 
-options (repos = "http://cran.md.tsukuba.ac.jp")
-install.packages ("パッケージ")
+install.packages("devtools")
+# library (devtools)
+# install_github("rasmusab/pingr")
+devtools::install <- github("hadley/dplyr")
 
+# 第3版1刷では間にあいませんでしたが githubinstall パッケージを利用すると
+# パッケージ名を指定するだけで、手軽にGithub からインスールできます
+# 同名あるいは類似の名前のパッケージが存在する場合は、いずれを選択するのか
+# 確認を求められます
+library (githubinstall)
+githubinstall ("AnomalyDetection")
+
+
+options (repos = "https://cran.md.tsukuba.ac.jp")
+install.packages ("パッケージ名を入力")
+
+## 上記を実行し依存関係でエラー出た場合
 install.packages ("パッケージ", dependencies = TRUE)
 
 pkg <- available.packages()
@@ -147,11 +181,12 @@ update.packages (ask = TRUE)
 download.file("http://rmecab.jp/data.R", destfile = "data.R")
 
 
+options (repos = "https://cran.ism.ac.jp")
+install.packages ("パッケージの名称")
 
 
 
-
-　## ----- SECTION 012  ヘルプの利用
+  ## ----- SECTION 012  ヘルプの利用
 # もっとも基本的な実行方法
 ?chisq.test
 # 上と同じ結果
@@ -159,16 +194,21 @@ help ("chisq.test")
 # パッケージの情報をみる
 help (package = "lattice")
 
+library (help = "lattice")
+
 # 現在のヘルプの表示方法を確認
 getOption ("help_type")
 # 出力方法を指定してヘルプを参照
-help ("chisq.test", help_type = "text")　#RStudioでは無効
+help ("chisq.test", help_type = "text")  #RStudioでは無効
 # ヘルプの表示方法を変更
 options (help_type = "text")
 
 help.search ("^chi")
 
 
+getOption("help_type")
+options()$help_type
+options("help_type")
 
 
 
@@ -176,6 +216,13 @@ help.search ("^chi")
 getOption ("browser")
 
 options (browser = "C:/Program Files/Mozilla Firefox/firefox")
+options (browser = "C:/Users/ishida/AppData/Local/Google/Chrome/Application/chrome.exe")
+
+
+help.search ("^chi")
+help.search ("\\bchi")
+
+
 
 
 
@@ -183,7 +230,12 @@ options (browser = "C:/Program Files/Mozilla Firefox/firefox")
   ## ----- SECTION 013 ビニエット（簡易マニュアル）の利用
 # 現在読み込んでいるパッケージに用意されたビニエット一覧
 
-vignette (all = FALSE)　#RStudioでは無効
+vignette (all = FALSE)  
+
+vignette (package = "grid")  
+
+vignette ("rotated", package = "grid")
+
 
 browseURL ("http://cran.md.tsukuba.ac.jp/",
      browser = "C:/Program Files (x86)/Mozilla Firefox/firefox")
@@ -192,6 +244,10 @@ demo ()
 demo (package = .packages (all.available = TRUE))
 
 demo (Japanese)
+
+
+
+
 
   ## ----- SECTION 014  Rや統計解析に関係する情報の収集
 # R 関連のメーリングリストから探す

@@ -1,5 +1,5 @@
-#@–{‘‚Ì“à—e‚É‰ˆ‚Á‚½İ’è‚É‚È‚Á‚Ä‚¢‚Ü‚·
-# ˆê”Ê“I‚Èİ’è‚Íhttp://oku.edu.mie-u.ac.jp/~okumura/stat/Rprofile.html‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢
+#ã€€æœ¬æ›¸ã®å†…å®¹ã«æ²¿ã£ãŸè¨­å®šã«ãªã£ã¦ã„ã¾ã™
+# ä¸€èˆ¬çš„ãªè¨­å®šã¯http://oku.edu.mie-u.ac.jp/~okumura/stat/Rprofile.htmlã‚’å‚ç…§ã—ã¦ãã ã•ã„
 
 options (repos="http://cran.md.tsukuba.ac.jp")
 setHook (packageEvent ("grDevices", "onLoad"),

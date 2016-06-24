@@ -1,5 +1,4 @@
-
-# 改訂第3版  2016年3月5日
+# 第3版  2016年 06 月 22 日
 
 ############################################################
 #               第13章 多変量グラフィックス                #
@@ -9,7 +8,7 @@
 
 
 
-  ## ----- SECTION 192  分割表をプロットする
+  ## ----- SECTION 195  分割表をプロットする
 # タイタニック号のデータ
 str (Titanic)
 
@@ -41,7 +40,7 @@ assocplot (ty)
 
 
 
-  ## ----- SECTION 193  コプロット（条件付散布図）を描画する
+  ## ----- SECTION 196  コプロット（条件付散布図）を描画する
 summary (quakes)
 
 # 連続量を条件変数とし、パネルごとの重なりを減らしたプロット
@@ -54,7 +53,7 @@ coplot (lat ~ long | depth * mag, data = quakes,
 
 
 
-  ## ----- SECTION 194 ヒートマップを作成する
+  ## ----- SECTION 197 ヒートマップを作成する
 # 乗用車の燃費デーの最初の4つの変数を抽出した行列を作成
 x <- as.matrix (mtcars [, 1:4])
 # 行（乗用車の種別）についてはデンドログラムを作成する
@@ -75,7 +74,7 @@ hv <- heatmap (x, col = cm.colors (256), Colv = NA,
 
 
 
-  ## ----- SECTION 195  3次元データをグラフ化する
+  ## ----- SECTION 198  3次元データをグラフ化する
 # ニュージーランドの Mt. Eden の地形データ
 x <- 10 * (1:nrow (volcano))
 y <- 10 * (1:ncol (volcano))
@@ -95,7 +94,7 @@ contour (x, y, z)
 
 
 
-  ## ----- SECTION 196  「lattice」グラフィックスとは
+  ## ----- SECTION 199  「lattice」グラフィックスとは
 
 library (lattice)
 # 以下で四つのグラフィックス・オブジェクトを作成
@@ -186,7 +185,7 @@ bwplot (Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
 
 
 
-  ## ----- SECTION 197  3次元散布図を作成する
+  ## ----- SECTION 200  3次元散布図を作成する
 
 # 3次元散布図
 cloud (Sepal.Length ~ Petal.Length * Petal.Width | Species, data = iris,
@@ -197,7 +196,7 @@ cloud (Sepal.Length ~ Petal.Length * Petal.Width | Species, data = iris,
 
 
 
-  ## ----- SECTION 198  3次元平面透視図を作成する
+  ## ----- SECTION 201  3次元平面透視図を作成する
 
 # ニュージーランドの Mt. Eden の地形データ
 # 基本グラフィックス関数の場合
@@ -211,7 +210,7 @@ wireframe (volcano, shade = TRUE)
 
 
 
-  ## ----- SECTION 199  「ggplot2」グラフィックスとは
+  ## ----- SECTION 202  「ggplot2」グラフィックスとは
 
 # パッケージをインストール
 # install.packages ("ggplot2")
@@ -222,8 +221,8 @@ data (diamonds)
 qplot (carat, price, data = diamonds)
 
 # 平滑化線を追加する
-qplot (carat, price, data = diamonds,
-       geom = c ("point","smooth"), method = "lm")
+qplot (carat, price, data = diamonds, 
+       geom = c ("point","smooth"))
 
 # 箱ひげ図
 qplot (color, carat, geom = "boxplot", data = diamonds)
@@ -236,20 +235,16 @@ qplot (carat, geom = "bar", binwidth = .5, data = diamonds)
 
 # 「ggplot」関数によるマッピング
 p1 <- ggplot (diamonds, aes (x = carat, y = price, color = cut))
-# まだ描画できない
-p1
-
-
 # レイヤーを追加して描画
-p1 + geom_point()# p1 + layer (geom = "point")に同じ
+p1 + geom_point()
 
 # 別の描画
 p2 <- ggplot (diamonds, aes (carat))
-p2 + stat_density() # p2 + layer(stat = "density")に同じ
+p2 + stat_density() 
 
 
 # ファセットを使って水準ごとに分割
-p2 + geom_density() + facet_wrap(~ cut)
+p2 + geom_density() + facet_wrap(~cut)
 
 # プロットを分けずに水準を区別
 ggplot (diamonds, aes (price, fill = cut)) + geom_density (alpha = 0.2)
@@ -262,90 +257,90 @@ p1 + geom_point() + labs (title = "メインタイトル", x = "X軸", y = "Y軸")
 ggsave (file = "ggplot2.pdf")
 
 
+
 # プロットの土台を作成
-p <- ggplot (iris, aes(x = Sepal.Width, y = Sepal.Length, colour = Species))
+p <- ggplot (iris, aes (x = Sepal.Width, y = Sepal.Length, colour = Species))
 # 点を打つ
 p + geom_point () 
 # さらに回帰直線を加える
 p + geom_point () + geom_smooth ()
 
 
-
-p <- ggplot(iris, aes (Sepal.Length))
+# ヒストグラム
+p <- ggplot (iris, aes (Sepal.Length))
 p + geom_histogram ()
 # デフォルトではY軸は頻度(以下の命令に同じ)
-# p + geom_histogram(aes(y = ..count..))
+#  p + geom_histogram(aes(y = ..count..))
+
+# 縦軸を密度に変え、密度曲線を追加
+p1 <- ggplot(iris, aes (x = Sepal.Length, y = ..density..))
+p1 + geom_histogram () + geom_density ()
 
 
-# 密度に変える
-p + geom_histogram(aes(y = ..density..))
 
 # 枠のカラー指定
-p + geom_histogram(aes(colour = Species))
+p + geom_histogram (aes (colour = Species))
 
 
 # 塗り潰しカラーの指定
-p + geom_histogram(aes(fill = Species))
+p + geom_histogram (aes (fill = Species))
 
 
 # ビンを設定
-p + geom_histogram(aes(fill = Species), binwidth = 0.5)
-
-library(help = "ggplot2")
-
+p + geom_histogram (aes (fill = Species), binwidth = 0.5)
 
 # 品種ごとの度数を積み上げたヒストグラム
-p + geom_histogram(
-  aes(fill=Species),
+p + geom_histogram (
+  aes (fill = Species),
   alpha = 0.5,
   position = "stack"
 )
 
 
 # 横に並べたヒストグラム
-p + geom_histogram(
-  aes(fill=Species),
+p + geom_histogram (
+  aes (fill = Species),
   alpha = 0.5,
   position = "dodge"
 )
 
 
 # 品種ごとにヒストグラムを作成
-p + geom_histogram(
-  aes(fill=Species),
+p + geom_histogram (
+  aes (fill=Species),
   alpha = 0.5,
   position = "identity"
 )
 
 
-p <- ggplot(iris, aes (Sepal.Length))
-p + geom_histogram(color = "black", fill = NA)
+p <- ggplot (iris, aes (Sepal.Length))
+p + geom_histogram (color = "black", fill = NA)
 
 library (tidyr)
 
 
 # 縦長形式に整形したデータを「ggplot」に渡し「geom_boxplot」を指定
-iris %>% gather (key, value, -Species ) %>%  ggplot(aes(x = key, y = value, color = key)) +   geom_boxplot()
+iris %>% gather (key, value, -Species ) %>%  ggplot (aes (x = key, y = value, color = key)) +   geom_boxplot()
 
 
 # 軸ラベルは「labs」関数の引数として指定する以外に，「xlab」や「ylab」で指定することも可能
- iris %>% gather (key, value, -Species ) %>% ggplot(aes(x = key, y = value)) +  geom_boxplot() + xlab("品種") + ylab("") +  ggtitle("箱ひげ図")
+iris %>% gather (key, value, -Species ) %>% ggplot (aes (x = key, y = value)) +  geom_boxplot () + xlab("品種") + ylab ("") +  ggtitle ("箱ひげ図")
 
 
 # 品種ごとにプロットを作成
-iris %>% gather (key, value, -Species ) %>% ggplot(aes(x = key, y = value)) + geom_boxplot() + facet_wrap (~Species)
+iris %>% gather (key, value, -Species ) %>% ggplot (aes (x = key, y = value)) + geom_boxplot () + facet_wrap (~Species)
 
 
 # 点の形状を変更
-p <- ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, shape = Species))
-p + geom_point()
+p <- ggplot (iris, aes (x = Sepal.Width, y = Sepal.Length, shape = Species))
+p + geom_point ()
 
 # 軸の幅を調整
-p <- ggplot(iris, aes(x = Sepal.Width, y = Sepal.Length, colour=Species))
-p + geom_point()  + xlim(c(1.0, 5.0))
+p <- ggplot (iris, aes (x = Sepal.Width, y = Sepal.Length, colour = Species))
+p + geom_point ()  + xlim (c (1.0, 5.0))
 
 # 軸を調整する
-p + geom_point()  + scale_x_continuous(breaks=seq(1, 5, by=.25))
+p + geom_point()  + scale_x_continuous (breaks=seq(1, 5, by=.25))
 
 p <- ggplot(iris, aes (Sepal.Length))
 p + geom_histogram() + coord_flip()
@@ -356,8 +351,9 @@ p + geom_histogram() + theme_bw (base_size = 12)
 
 
 
-## ----- SECTION 200  「rgl」パッケージによる３Dグラフィックス
 
+
+  ## ----- SECTION 203  「rgl」パッケージによる３Dグラフィックス
 install.packages ("rgl")
 library (rgl)
 
@@ -383,20 +379,22 @@ open3d () # RGLデフォルトの作画パラメータを利用
 surface3d (x, y, z, color = col, back = "lines")
 
 
-## ----- SECTION ***  「googleVis」パッケージ
 
+## ----- SECTION 204 モーションチャート
 
+# 「googleVis」パッケージ
 install.packages ("googleVis")
 library (googleVis)
 
 # フルーツデータの確認
 Fruits
 
-M <- gvisMotionChart(Fruits, idvar="Fruit", timevar = "Year")
+M <- gvisMotionChart (Fruits, idvar="Fruit", timevar = "Year")
 plot (M)
 
 demo (googleVis)
 # デモ一覧
-demo(package='googleVis') 
+demo (package='googleVis') 
+
 
 

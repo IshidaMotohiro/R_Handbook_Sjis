@@ -1,32 +1,28 @@
 
-R version 3.2.3 (2015-12-10) -- "Wooden Christmas-Tree"
-Copyright (C) 2015 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64 (64-bit)
+R version 3.3.0 (2016-05-03) -- "Supposedly Educational"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
-R �́A���R�ȃ\�t�g�E�F�A�ł���A�u���S�ɖ��ۏ؁v�ł��B 
-���̏����ɏ]���΁A���R�ɂ�����Ĕz�z���邱�Ƃ��ł��܂��B 
-�z�z�����̏ڍׂɊւ��ẮA'license()' ���邢�� 'licence()' �Ɠ��͂��Ă��������B 
+R は、自由なソフトウェアであり、「完全に無保証」です。 
+一定の条件に従えば、自由にこれを再配布することができます。 
+配布条件の詳細に関しては、'license()' あるいは 'licence()' と入力してください。 
 
-R �͑����̍v���҂ɂ�鋤���v���W�F�N�g�ł��B 
-�ڂ����� 'contributors()' �Ɠ��͂��Ă��������B 
-�܂��AR �� R �̃p�b�P�[�W���o�ŕ��ň��p����ۂ̌`���ɂ��Ă� 
-'citation()' �Ɠ��͂��Ă��������B 
+R は多くの貢献者による共同プロジェクトです。 
+詳しくは 'contributors()' と入力してください。 
+また、R や R のパッケージを出版物で引用する際の形式については 
+'citation()' と入力してください。 
 
-'demo()' �Ɠ��͂���΃f�����݂邱�Ƃ��ł��܂��B 
-'help()' �Ƃ���΃I�����C���w���v���o�܂��B 
-'help.start()' �� HTML �u���E�U�ɂ��w���v���݂��܂��B 
-'q()' �Ɠ��͂���� R ���I�����܂��B 
+'demo()' と入力すればデモをみることができます。 
+'help()' とすればオンラインヘルプが出ます。 
+'help.start()' で HTML ブラウザによるヘルプがみられます。 
+'q()' と入力すれば R を終了します。 
 
- �v�����ꂽ�p�b�P�[�W ggplot2 �����[�h���ł� 
- [�ȑO�ɃZ�[�u���ꂽ���[�N�X�y�[�X�𕜋A���܂�] 
-
-> 
 > x <- rnorm(1000)
 > mean(x); sd(x)
-[1] 0.02566192
-[1] 1.02066
-> hist(x, main = "�q�X�g�O����")
+[1] 0.01093172
+[1] 0.9931028
+> hist(x, main = "ヒストグラム")
 > 
 > proc.time()
-   ���[�U   �V�X�e��       �o��  
-      0.46       0.09       0.56 
+   ユーザ   システム       経過  
+     0.124      0.000      0.249 

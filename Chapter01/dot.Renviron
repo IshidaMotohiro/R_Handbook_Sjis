@@ -1,7 +1,7 @@
-# u.Renvironv‚Ìİ’è Windows
+# ã€Œ.Renvironã€ã®è¨­å®š Windows
 R_LIBS_USER=C:/Users/MyNAME/Rlibs
 # R_LIBS_SITE=C:/Program Files/R/R-2.14.1/library
 
-# u.Renvironv‚Ìİ’è Mac
+# ã€Œ.Renvironã€ã®è¨­å®š Mac
 R_LIBS_USER=/Users/MyNAME/Rlibs
 R_LIBS_SITE=/Library/Frameworks/R.framework/Version/2.1*/Resources/library

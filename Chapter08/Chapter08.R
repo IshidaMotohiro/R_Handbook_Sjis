@@ -1,5 +1,4 @@
-
-# 改訂第3版  2016年02月27日
+# 第3版  2016年 06 月 18 日
 
 
 ############################################################
@@ -9,7 +8,7 @@
 
 
 
-  ## ----- SECTION 109 関数作成の基礎
+  ## ----- SECTION 110 関数作成の基礎
 div <- function (x, y) {
      x / y
 }
@@ -43,7 +42,7 @@ div(5, 0)
 
 
 
-  ## ----- SECTION 110 関数オブジェクトを定義する
+  ## ----- SECTION 111 関数オブジェクトを定義する
 # 関数を定義する
 foo <- function(){
   x <- "最初の関数"
@@ -73,12 +72,11 @@ foo (x = 3)
 #  無名関数
 (function(x,y){x/y}) (6,3)
 
-# ラムダ記法
 
 library (dplyr)
-
 iris %>% filter (Species == "setosa") %>% boxplot() %>% NROW()
 
+# ラムダ記法
 iris %>% filter (Species == "setosa") %>% {
   boxplot(.)
   NROW(.)
@@ -93,22 +91,48 @@ iris %>%
 } %>%
   summary
 
-n; H; T
-
+# 「magrittr」パッケージの各種演算子
+library(magrittr)
+# %T>%
 iris %>% filter (Species == "setosa") %T>% boxplot() %>% NROW()
 
 iris %>% cor (Sepal.Length, Sepal.Width)
+# %$%
+iris %$% cor (Sepal.Length, Sepal.Width)
 
-library(magrittr)
-iris %$%  cor (Sepal.Length, Sepal.Width)
+iris$Sepal.Length <- 
+  iris$Sepal.Length %>%
+  sqrt
+
+# %<>%
+iris$Sepal.Length %<>% sqrt
+
+iris %<>% mutate(Sepal.Length = sqrt(Sepal.Length) ) 
 
 
+# ???????????????????????????????????????????????????????????
 # リストを用意
 x <- list(A = 1:10, B = 11:20, C = 21:30)
 
+# リストの要素AをX軸に、残りの要素のいずれか1つをY軸にとったグラフィックス
+par(mfrow = c(2,1))
+for (i in 2:3) {
+    tmp <- c(names(x)[1], names(x)[i])
+    do.call ("plot",
+             list(x[[1]] ~ x[[i]],
+                  main = deparse (substitute(y ~ x,
+                      list (y = tmp[1], x = tmp[2]))),
+                  xlab = tmp[1], ylab = tmp[2]))
+}
+
+par(mfrow = c(1,2))
+for (i in 2:3) plot(x[[1]] ~ x[[i]])
+
+# ???????????????????????????????????????????????????????????
 
 
-  ## ----- SECTION 111 引数のデフォルト値を設定する
+
+  ## ----- SECTION 112 引数のデフォルト値を設定する
 # 仮引数の2つにデフォルト値を設定する
 foo <- function (x, y = 2, z = 3) {
   x + y * 10 + z * 100
@@ -158,12 +182,17 @@ fooDot2 <- function (x, y = 1, ...) {
 
 fooDot2 (1, 2, "A", "B", "C")
 
+func <- function (myFirstLongArgument = "hoge", mySecondLongArgument = "foo")
+{
+  print (myFirstLongArgument)
+  print (mySecondLongArgument)
+}
+func (myS = "実引数２", myF = "実引数１")
 
 
 
 
-
-  ## ----- SECTION 112  引数をチェックする
+  ## ----- SECTION 113  引数をチェックする
 
 # 仮引数の一方にデフォルト値を設定する
 foo <- function (x, y = 1) {
@@ -227,7 +256,7 @@ fooP ("nut")
 
 
 
-  ## ----- SECTION 113 関数から複数の値を返す
+  ## ----- SECTION 114 関数から複数の値を返す
 
 foo <- function(x = 1, y = 1){
   tmp <- c (x, y, x + y, x -y , x *y, x / y)
@@ -261,7 +290,7 @@ foo (1, 2)
 
 
 
-  ## ----- SECTION 114 エラーを処理する
+  ## ----- SECTION 115 エラーを処理する
 
 foo <- function (x) {
   if (x < 0) stop ("x < 0")
@@ -315,7 +344,7 @@ for (i in c (1, -1, 1, -1, 1)){
 
 
 
-  ## ----- SECTION 115  引数を取り出して利用する
+  ## ----- SECTION 116  引数を取り出して利用する
 # 引数をそのまま取り出す
 fooS1 <- function (x) {
   arg = substitute (x)
@@ -373,7 +402,7 @@ vf (y = c("A","B","C"))
 
 
 
-  ## ----- SECTION 117  警告を抑制する
+  ## ----- SECTION 118  警告を抑制する
 x <- c (1, 0, -1, 0)
 log (x)
 
@@ -409,7 +438,7 @@ getOption ("warn")
 
 
 
-  ## ----- SECTION 118  条件分岐を設定する
+  ## ----- SECTION 119  条件分岐を設定する
 x <- 0
 if (x > 0) log (x) else print ("x > 0 としてください")
 
@@ -457,8 +486,6 @@ ifelse(x >= 0, sqrt(x), NA)
 
 # 警告を回避する
 sqrt (ifelse(x >= 0, x, NA))
-# 以下はエラー 
-sqrt (ifelse(x >= 0, x, "計算できません"))
 
 # 「switch」関数
 # 第1引数「C」に対応する要素が抽出される
@@ -477,7 +504,7 @@ switch (5, "A", "B", "C", "DEFAULT")
 # 要素番号で指定した場合デフォルト値で使えない
 
 
-#  書籍には未掲載のコード例
+#  テキストには未掲載のコード例
 a <- b <- 8; x <- "+"
 switch (x,
         "+" = {cat (a, " + ",  b,  " = "); a + b },
@@ -493,7 +520,7 @@ switch (x,
 
 
 
-  ## ----- SECTION 119 ループ（繰り返し）を設定する
+  ## ----- SECTION 120 ループ（繰り返し）を設定する
 x <- LETTERS
 
 # 添え字を使ったループ
@@ -552,7 +579,7 @@ repeat {
 replicate(10, {x <- rnorm(100); summary(x)})
 
 
-  ## ----- SECTION 120  ループを中断する
+  ## ----- SECTION 121  ループを中断する
 x <- 5
 while (x > 0) {
   x <- print(x) - 1 # x を出力してから 1 引く
@@ -565,8 +592,14 @@ while (x > 0) {
 
 
 
- ## ----- SECTION 121  「do.call」関数を使ってコードを実行する
+ ## ----- SECTION 122  「do.call」関数を使ってコードを実行する
 
+xyz <- list(X = 1:5, Y = 6:10, Z = 11:15)
+xyz
+
+do.call("data.frame", xyz)
+
+do.call("rbind", xyz)
 
 # リストを用意
 x <- list(A = 1:10, B = 11:20, C = 21:30)
@@ -583,40 +616,47 @@ for (i in 2:3) {
  }
 
 
-for (i in 2:3) {
- plot (x[[1]] ~ x[[i]])
-}
+daf1 <- data.frame(X = 1:5, Y = 6:10)
+daf2 <- data.frame(X = 11:15, Y = 16:20)
+daf3 <- data.frame(X = 21:25, Y = 26:30)
+# データフレーム名をすべて指定して実行
+rbind (daf1, daf2,  daf3)
 
 
 
+  ## ----- SECTION 123  高階関数
 
-## ----- SECTION 高階関数
+# 「畳み込み」という処理
+Reduce(`+`, c (1, 2, 3))
 
-Reduce (`+`,c(1,2,3))
+# 引数「accumulate」を指定
+Reduce(`+`,c(1,2,3), accumulate = TRUE)
 
-Reduce (`+`,c(1,2,3), accumulate = TRUE)
+Reduce(`+`, c(1, 2, 3), c (10, 20, 30))
 
-Reduce (`+`,c(1,2,3), c(10,20,30))
-
+# 「Map」関数
 Map(`+`, c(1, 2, 3), c(10, 20, 30))
-Map(`+`, 1, c(10, 20, 30))
+
+Map(`+`, 1,  c(10, 20, 30))
+
 Map(`+`, c(1, 2, 3), 10)
+
 Map(`+`, c(1, 2, 3), c(10, 20))
 
-
-Filter (function(x) x > 0, c(-2,-1,0,1,2))
+# 真偽を返すFilter ()
+Filter (function(x) x > 0,  c(-2, -1, 0, 1, 2))
 
 Find (function(x) x > 0, c(-2,-1,0,1,2))
 
-# 「purrr」パッケージ
-library (purrr)
 
+# 「purrr」パッケージ
+install.packages ("purrr")
+library (purrr)
 # reduce (c (1, 2, 3), `+`)
 c (1, 2, 3) %>% reduce (`+`)
 
-# ラムダ記法を使う
-c(1, 2, 3) %>% map(~ . + 1)
+# ~ はラムダ記法を使う
+c(1, 2, 3) %>% map (~ . + 1)
 
 # Filterに対応
-c (-2, -1, 0, 1, 2) %>% keep ( ~ .> 0)
-
+c (-2, -1, 0, 1, 2) %>% keep ( ~ . > 0)

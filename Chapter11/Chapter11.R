@@ -1,23 +1,25 @@
+# 第3版  2016年 06 月 22 日
 
-# 改訂第3版  2016年03月19日
 
 ############################################################
 #                   第11章 応用統計解析                    #
 ############################################################
 
 
-  ## ----- SECTION 154 CRAN Task Views
+  ## ----- SECTION 156 CRAN Task Views
 
 # Task Viewsを管理するパッケージを導入
 
 
 # install.packages("ctv")
+# llbrary (ctv)
+# 経済学関連の分析技法を一括導入する
 # install.views("Econometrics")
 
 
 
 
-  ## ----- SECTION 155  一般化線形モデルを実行する
+  ## ----- SECTION 157  一般化線形モデルを実行する
 
 # install.packages("faraway") # farawayパッケージのデータを例に説明します
 library (faraway)
@@ -33,7 +35,7 @@ summary (model1)
 
 
 
-  ## ----- SECTION 156 一般化線形モデルを更新/比較する
+  ## ----- SECTION 158 一般化線形モデルを更新/比較する
 
 # もう1つ変数を投入する
 model2 <- update (model1, . ~ . + Elevation)
@@ -60,7 +62,7 @@ stepAIC (model3)
 
 
 
-  ## ----- SECTION 157 二項分布を仮定して、データに一般化線形モデルを適用する
+  ## ----- SECTION 159 二項分布を仮定して、データに一般化線形モデルを適用する
 
 # もう少し複雑な二項モデルの例
 ?esoph # 胸部食道癌データ
@@ -94,7 +96,7 @@ binom3.step <- stepAIC (binom3, direction = "forward",
 
 
 
-  ## ----- SECTION 158 主成分分析を実行する
+  ## ----- SECTION 160 主成分分析を実行する
 
 # 合衆国各週の犯罪率
 USArrests
@@ -114,11 +116,11 @@ biplot (pc.cr)
 
 
 
-  ## ----- SECTION 159 因子分析を実行する
+  ## ----- SECTION 161 因子分析を実行する
 
 # 『RとS-PLUSによる多変量解析』第 4 章
 # 1960 年代の世代別平均余命データ（修正版）
-life <- read.table ("life.txt", row.names = 1)
+life <- read.table ("Chapter11/life.txt", row.names = 1)
 head (life)
 
 #「factanal」関数で3因子まで求める
@@ -162,7 +164,7 @@ biplot (life.fa3.ob$scores, life.fa3.ob$loadings)
 
 
 
-  ## ----- SECTION 160  対応分析を実行する
+  ## ----- SECTION 162  対応分析を実行する
 
 library (MASS) #「MASS」パッケージをロード
 # 髪と眼それぞれの色の対応データ
@@ -184,10 +186,10 @@ plot (farms.mca)
 
 
 
-  ## ----- SECTION 161 クラスター分析を実行する
+  ## ----- SECTION 163 クラスター分析を実行する
 # 『RとS-PLUSによる多変量解析』第 4 章
 # 1960 年代の世代別平均余命データ
-life <- read.table ("life.txt", row.names = 1)
+life <- read.table ("Chapter11/life.txt", row.names = 1)
 head (life)
 
 ## 階層的クラスター分析
@@ -219,7 +221,7 @@ table (km$cluster, iris[,5])
 
 
 
-  ## ----- SECTION 162  線形判別分析を実行する
+  ## ----- SECTION 164  線形判別分析を実行する
 # 組み込みの「アヤメ」データからランダムに80行抽出
 set.seed (123)
 extract <- sample (1:150, 80)
@@ -247,7 +249,7 @@ table (iris [, 5], iris.lda3$class)
 
 
 
-  ## ----- SECTION 163  ニューラルネットワークを実行する
+  ## ----- SECTION 165  ニューラルネットワークを実行する
 
 library (nnet)
 # 組み込みの「アヤメ」データからランダムに80行抽出
@@ -273,8 +275,9 @@ table (iris [-extract, 5], iris.pre2)
 
 
 
-  ## ----- SECTION 164 サポートベクターマシンを実行する
+  ## ----- SECTION 166 サポートベクターマシンを実行する
 # 「kernlab」パッケージを読み込む
+install.packages ("kernlab")
 library (kernlab)
 iris2 <- iris[1:100, ]
 iris2$Species <- droplevels (iris2$Species)
@@ -295,7 +298,8 @@ table( iris2 [-extract, ]$Species, iris.test)
 
 
 
-  ## ----- SECTION 165 決定木を利用する
+  ## ----- SECTION 167 決定木を利用する
+# install.packages ("rpart")
 library (rpart)
 # 術後の脊柱後弯症の有無データ
 nrow (kyphosis)
@@ -321,7 +325,7 @@ zp <- prune(z.auto, cp = 0.1)
 
 
 
-  ## ----- SECTION 166 自己組織化マップを作成する
+  ## ----- SECTION 168 自己組織化マップを作成する
 # install.packages ("kohonen")
 
 library (kohonen)
@@ -359,7 +363,7 @@ table(wine.classes[-training], som.prediction$prediction)
 
 
 
-  ## ----- SECTION 167 ベイジアンネットワーク分析を利用する
+  ## ----- SECTION 169 ベイジアンネットワーク分析を利用する
 #「deal」パッケージをインストールする
 install.packages ("deal")
 library (deal)
@@ -402,7 +406,7 @@ plot (getnetwork (ksl.as2), showban = FALSE)
 
 
 
-  ## ----- SECTION 168  ベイズ統計解析を行う
+  ## ----- SECTION 170  ベイズ統計解析を行う
 
 #「MCMCpack」パッケージをインストールする
 install.packages ("MCMCpack")
@@ -427,7 +431,7 @@ ls ("package:MCMCpack")
 
 
 
-  ## ----- SECTION 169  ベイズ法で線形回帰分析を行う
+  ## ----- SECTION 171  ベイズ法で線形回帰分析を行う
 # 線形回帰モデル
 line <- list (X = c (-2,-1,0,1,2), Y = c (1,3,3,3,5))
 posterior <- MCMCregress (Y~X, data=line, verbose=1000)
@@ -438,7 +442,7 @@ raftery.diag (posterior)
 
 
 
-  ## ----- SECTION 170 MCMCpackパッケージでユーザー定義の関数をシミュレーションする
+  ## ----- SECTION 172 MCMCpackパッケージでユーザー定義の関数をシミュレーションする
 
 # サンプリングしたい関数を定義
 # ロジスティック・モデルの対数尤度関数
@@ -480,88 +484,85 @@ dat.glm <- glm (yvector ~ x1 + x2, data = dat,
 summary (dat.glm)
 
 
+     ## ----- SECTION 173 「RStan」パッケージ
 
-
-
-
-
-
-## ----- SECTION 170 RStanパッケージ
-
-install.packages("rstan")
-
+install.packages ("rstan")
 
 N <- 10
 y <- c(0,1,0,0,0,0,0,0,0,1)
-coinModel <- '
-data {
-int<lower=0> N;
-int<lower=0,upper=1> y[N];
-}
-parameters {
-real<lower=0,upper=1> theta;
-}
-model {
-theta ~ beta(1,1);
-for (n in 1:N)
-y[n] ~ bernoulli(theta);
-}' 
 
-library (rstan)
+coinModel <- '
+ data {
+ int<lower=0> N;
+ int<lower=0,upper=1> y[N];
+ }
+ parameters {
+ real<lower=0,upper=1> theta;
+ }
+ model {
+ theta ~ beta(1,1);
+ for (n in 1:N)
+ y[n] ~ bernoulli(theta);
+ }' 
 
 coinData <- list (N = N, y = y)
 
-fit <- stan(model_code = coinModel, data = coinData, iter = 1000, chains = 4)
 
-fit
+library (rstan)
+fit <- stan(model_code = coinModel, data = coinData, 
+            iter = 1000, chains = 4)
+fit 
 
 traceplot (fit)
 
-fit.ext <- extract(fit, "theta") 
+fit.ext <- extract (fit, "theta") 
 quantile (fit.ext$theta)
 
-# 階層モデル
+
 schools_code <- '
-data {
+ data {
  int<lower=0> J; // 高校の数を表す整数
  real y[J]; // 推定された効果
- real<lower=0> sigma[J]; // その標準誤差  
-}
-
-parameters {
-  real mu;           // 全体平均
-  real<lower=0> tau; // 効果
-  real eta[J];       // 誤差
-}
-transformed parameters {
-  real theta[J];     // 高校ごとの効果
-  for (j in 1:J)     // etaは高校ごとに異なる誤差
-    theta[j] <- mu + tau * eta[j];
+ real<lower=0> sigma[J]; // その標準誤差
  }
-model {
-  eta ~ normal(0, 1);
-  y ~ normal(theta, sigma); // ベクトル演算が適用される
- }'
-
+ parameters {
+ real mu; // 全体平均
+ real<lower=0> tau; // 効果
+ real eta[J]; // 誤差
+ }
+ transformed parameters {
+ real theta[J]; // 高校ごとの効果
+ for (j in 1:J) // etaは高校ごとに異なる誤差
+ theta[j] <- mu + tau * eta[j];
+ }
+ model {
+ eta ~ normal(0, 1);
+ y ~ normal(theta, sigma); // ベクトル演算が適用される
+ }
+ '
 
 # データを用意
-schools_dat <- list(J = 8, y = c(28,  8, -3,  7, -1,  1, 18, 12), sigma = c(15, 10, 16, 11,  9, 11, 10, 18))
-
-
-# 並列化する
-rstan_options(auto_write = TRUE)
-options(mc.cores = parallel::detectCores())
-
-
+schools_dat <- list(J = 8, 
+                    y = c(28, 8, -3, 7, -1, 1, 18, 12),
+                    sigma = c(15, 10, 16, 11, 9, 11, 10, 18))
 # rstanでサンプリング
-fit <- stan(model_code = schools_code, data = schools_dat, iter = 1000, chains = 4, adapt_delta = 0.81)
+fit <- stan(model_code = schools_code, data = schools_dat, 
+            iter = 1000, chains = 4)
+
+# 出力に「Increasing adaptdelta aboe 08 ma help」と出たとして再設定
+fit <- stan(model_code = schools_code, data = schools_dat,
+            iter = 1000, chains = 4, control = list(adapt_delta = 0.9))
 
 
-# 引数を追加指定
-fit <- stan(model_code = schools_code, data = schools_dat, iter = 1000, chains = 4, control = list(adapt_delta = 0.9))
 
+# 「shinystan」パッケージを使ってみる
 install.packages("shinystan")
-
 library (shinystan)
-launch_shinystan(fit)
+launch_shinystan (fit)
+
+# モデルを独立したファイルとして用意
+fit2 <- stan (file = "Chapter11/coin.stan", data = coinData, 
+              iter = 1000, chains = 4)
+
+
 

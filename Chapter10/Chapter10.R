@@ -1,5 +1,5 @@
+# 第3版  2016年 06 月 22 日
 
-# 改訂第3版  2016年3月3日
 
 ############################################################
 #               第10章 基本統計解析                #
@@ -8,7 +8,7 @@
 
 
 
-  ## ----- SECTION 136 基本統計関数について
+  ## ----- SECTION 138 基本統計関数について
 
 # 正規分布
 # 累積確率、いわゆる分布
@@ -130,7 +130,7 @@ Conj (z1)
 
 
 
-  ## ----- SECTION 137   乱数の利用
+  ## ----- SECTION 139   乱数の利用
 
 # 毎回ランダムな結果がえられる
 rnorm (3)
@@ -160,7 +160,7 @@ RNGkind ()
 
 
 
-  ## ----- SECTION 138   要約統計量を求める
+  ## ----- SECTION 140   要約統計量を求める
 # 「iris」データの要約
 summary (iris)
 
@@ -183,9 +183,6 @@ tapply (x$Grade, x$Sex, summary)
 aggregate (. ~ Species, FUN = mean, data = iris)
 # aggregate (iris [-5], iris [5], mean)
 
-# 「dplyr」を使う
-library (dplyr)
-iris %>% group_by (Species) %>% summarise_each (funs(mean))
 
 # 中央値
 aggregate (. ~ Species, FUN = median, data = iris)
@@ -222,17 +219,21 @@ aggregate (. ~ Species, FUN = quantile, data = iris,
 aggregate (. ~ Species, data = iris, FUN = fivenum)
 
 
-# データフレームにグループ別に求めた統計量を新規列として追加する
+
+## dplyr パッケージを使う
+library (dplyr)
+iris %>% group_by(Species) %>% summarise_each (funs (mean)) 
+
 head (chickwts)
-# chiclwtsデータフレームに新規に追加
-chickwts$tmp <- ave (chickwts$weight, chickwts$feed, FUN = rank)
-head(chickwts, 20)
+
+chickwts $ tmp <- ave (chickwts$weight, chickwts$feed, FUN = rank)
+
+head (chickwts, 20)
 
 
 
+  ## ----- SECTION 141  数値を丸める
 
-
-  ## ----- SECTION 139  数値を丸める
 round (1234.56789)
 round (1234.56789, digits = 2)
 
@@ -261,27 +262,24 @@ trunc (1234.9)
 x <- c (123.4, 123.45, 123.456, 1234.567)
 signif (x, digits = 5)
 
+
+
 (x <- 2.3 - 1.3)
 
 # 厳密には1ではない
 sprintf ("%.16f", x)
 
 # したがって1との比較は偽になる
-if (x >= 1) print("x >=1") else print("x<1")
+if (x >= 1) print("x >= 1") else print("x < 1")
 # このような場合に「zapsmall」が使えることがある
-if (zapsmall (x) >= 1) print("x >=1") else print("x<1")
-
-
-x1 <- c(1234567890, 0.1)
-x2 <- c(1234567890, 0.0)
-(x1 - x2) == 0
-
-zapsmall(x1, digits = 9) - x2 == 0
-zapsmall(x1, digits = 10) - x2 == 0
+if (zapsmall (x) >= 1) print("x >= 1") else print("x < 1")
 
 
 
-  ## ----- SECTION 140 データから欠損値を取り除く
+
+
+
+  ## ----- SECTION 142 データから欠損値を取り除く
 
 # 欠損値の扱い
 x <- c (5, 5, 5, NA, 5)
@@ -313,7 +311,7 @@ y [ complete.cases(y), ]
 
 # 組み込みのデータ「cars」を使用する
 # 50行のデータ
-nrow (cars)
+NROW (cars)
 
 # 最初の10行のd「dist」列をNAに変更
 cars$dist [1:10] <- NA
@@ -332,16 +330,18 @@ lm1 <- lm (dist ~ speed, data = cars)
 # オプションをもとに戻す
 options (opt)
 
-
-# 欠損値を置き換える
-# さきほどdist列の冒頭をNAに変更している
-cars
-cars$dist [ is.na(cars$dist)] <- 88
+# さきほど dist 列の冒頭を NA に変更している
 cars
 
+# 欠損値をすべて88に置き換える
+cars $ dist [is.na (cars$dist)] <- 88
+cars
+
+getOption ("na.action")
 
 
-  ## ----- SECTION 141  正規性の検定を行う
+
+  ## ----- SECTION 143  正規性の検定を行う
 # 「women」データから身長と体重を利用
 # シャピロ・ウィルク検定
 shapiro.test (women$height)
@@ -373,9 +373,7 @@ knots(x)
 
 
 
-
-
-  ## ----- SECTION 142 等分散性の検定を行う
+  ## ----- SECTION 144 等分散性の検定を行う
 # 2つのグループの睡眠時間の差
 # データの先頭を表示
 head (sleep)
@@ -399,8 +397,7 @@ fligner.test (count ~ spray, data = InsectSprays)
 
 
 
-
-  ## ----- SECTION 143  t検定で平均を比較する
+  ## ----- SECTION 145  t検定で平均を比較する
 # 睡眠データの先頭を表示
 head (sleep)
 
@@ -410,8 +407,6 @@ by (sleep [,1], sleep [,2], mean)
 
 # 標本平均と母集団の平均の比較
 t.test (sleep$extra [sleep$group == 1], mu = 1)
-t.test ()
-
 
 # 2つのグループの睡眠時間の差
 # 等分散性の検定
@@ -436,16 +431,11 @@ t.test (extra ~ group, alternative = "greater", data = sleep)
 t.test (extra ~ group, paired = TRUE, data = sleep)
 
 
-# ちなみにdplyrでは以下のように実行する
-library (dplyr)
-sleep %>%   t.test (extra ~ group, data = .)
 
 
 
 
-
-
-  ## ----- SECTION 144 ノンパラメトリックな検定で平均を比較する
+  ## ----- SECTION 146 ノンパラメトリックな検定で平均を比較する
 
 ## 月ごとのオゾン量データの先頭を表示
 head (airquality)
@@ -468,7 +458,7 @@ kruskal.test (Ozone ~ Month, data = airquality,
 
 
 
-  ## ----- SECTION 145 比率の検定を行う
+  ## ----- SECTION 147 比率の検定を行う
 # 1群の場合
 # 100回中30回成功したとき、成功確率は0.5とみなせるか
 prop.test (30, 100, p = .5)
@@ -496,7 +486,7 @@ prop.test (tbl)
 
 
 
-  ## ----- SECTION 146  独立性の検定（カイ二乗検定・Fisherの検定）を行う
+  ## ----- SECTION 148  独立性の検定（カイ二乗検定・Fisherの検定）を行う
 # 以下のような分割表があったとする
 (mat <- matrix (c (229, 286, 98, 58), byrow = TRUE, nrow = 2))
 
@@ -535,7 +525,7 @@ binom.test (c (86, 150))
 
 
 
-  ## ----- SECTION 147 相関係数を求める／検定する
+  ## ----- SECTION 149 相関係数を求める／検定する
 # 米国人女性の身長体重データ
 head (women)
 
@@ -549,7 +539,7 @@ cor.test (women$height, women$weight)
 
 
 
-  ## ----- SECTION 148  分散分析を行う
+  ## ----- SECTION 150  分散分析を行う
 
 ## 照明と作業効率
 p.141 <- c (6,3,4,5,2, 7,5,6,7,5, 8,7,8,9,8)
@@ -662,7 +652,7 @@ options (old.op)
 
 
 
-  ## ----- SECTION 149  多重比較を行う
+  ## ----- SECTION 151  多重比較を行う
 # 各群の平均値の多重比較
 pairwise.t.test (chickwts$weight, chickwts$feed)
 
@@ -678,7 +668,7 @@ TukeyHSD (aov1)
 
 
 
-  ## ----- SECTION 150  回帰分析を行う
+  ## ----- SECTION 152  回帰分析を行う
 # 車の速度とスピードを回帰分析
 # 単回帰帰分析をしてみる
 lm1 <- lm (dist ~ speed, data = cars)
@@ -718,25 +708,6 @@ coef (lm2)
 par (mfrow = c (2,2))
 plot (lm2)
 
-
-# 回帰を連続的に適用する
-## dplyr::do を使う
-
-library (dplyr)
-mtcars %>% group_by(cyl) %>%
-  do(
-    carslm = lm (mpg ~ wt, data = .)
-  ) %>% summarise(summary(carslm)$r.squared)
-
-## purrr::mapを使う
-library (purrr)
-mtcars %>%
-  split(.$cyl) %>%
-  map(~ lm(mpg ~ wt, data = .)) %>%
-  map(summary) %>%
-  map_dbl("r.squared")
-
-# モデルのアップデート
 # 項を追加
 lm3 <- update(lm2, .~. + I (Education^2) )
 summary (lm3)
@@ -748,7 +719,6 @@ summary (lm4)
 # ステップワイズに変数を選択する
 step (lm4, direction = "backward" )
 
-
 # scope引数で指定された項から1つを加えてあてはめる
 # 説明変数の交互作用をペアごとに追加した結果と，
 # 交互作用を含まないモデルを比較
@@ -758,13 +728,31 @@ add1(lm2, ~ .^2)
 lm5 <- lm (Fertility ~ .  + Agriculture:Examination, data = swiss)
 anova(lm2, lm5)
 
+# ステップワイズに変数を選択
+step (lm4, direction = "backward")
+
+## dplyr::do を使う
+library (dplyr)
+
+mtcars %>% group_by (cyl) %>% 
+  do (
+     carslm = lm (mpg ~ wt, data = .)
+    ) %>% summarize (summary (carslm) $ r.squared)
+
+## purrr パッケージを使う
+## purrr::map 
+
+library (purrr)
+mtcars %>% 
+  split (.$cyl) %>% 
+  map ( ~ lm (mpg ~ wt, data = .)) %>% 
+  map (summary) %>% 
+  map_dbl ("r.squared")
 
 
 
 
-
-
-  ## ----- SECTION 151  時系列データの統計量
+  ## ----- SECTION 153  時系列データの統計量
 
 # 体温を模した擬似データを乱数で作成
 temp <- round (rnorm (20, mean = 36.5, sd = 0.01), 2)
@@ -787,7 +775,7 @@ summary (ar.UK)
 
 
 
-  ## ----- SECTION 152  検出力を求める
+  ## ----- SECTION 154  検出力を求める
 # 検定力を求める
 power.t.test (n = 30, delta = 8, sd = 10, sig.level = 0.05,
               power = NULL, strict = TRUE)
@@ -802,7 +790,7 @@ power.t.test (n = NULL, delta = 8, sd = 10, sig.level = 0.05,
 
 
 
-  ## ----- SECTION 153 モデル式の基礎知識
+  ## ----- SECTION 155 モデル式の基礎知識
 # women データを作業スペースに登録
 attach (women)
 # モデル式

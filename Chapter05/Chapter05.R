@@ -1,4 +1,6 @@
-# 改訂第3版 2016年2月18日
+# 第3版  2016年 06 月 18 日
+
+
 ############################################################
 #                        第5章 行列                        #
 ############################################################
@@ -14,8 +16,8 @@ matrix (1:3, nrow = 3, ncol = 3)
 matrix (1:2, nrow = 3, ncol = 3)
 
 x <- matrix (1:9, nrow = 3, byrow = TRUE,
-　　dimnames = list (c ("row1", "row2", "row3"),
-　　c ("col1", "col2", "col3")))
+    dimnames = list (c ("row1", "row2", "row3"),
+    c ("col1", "col2", "col3")))
 x
 
 
@@ -43,8 +45,8 @@ y <- matrix (scan(), ncol = 3, byrow = TRUE)
 # 行列積を求める
 x %*% y
 
-# t(x) %*% y は以下の関数でも実行可能
-crossprod (t (x), y)
+# t(x)  %*% y は以下の関数でも実行可能
+crossprod (x, y)
 
 # x %*% t (y) は以下の関数でも実行可能
 tcrossprod (x, y)
@@ -68,14 +70,20 @@ outer (1:9, 1:9, "-" )
 # 数値以外でも利用できる
 outer (LETTERS[1:3], LETTERS[1:3], paste)
 
-
 # クロネッカー積
 # x %x% y か、次の関数で実行
 kronecker (x, y)
 
+# Wikipedia
+(X <- matrix(1:4, ncol = 2, byrow = TRUE))
+(Y <- matrix(c(0,6,5,7), ncol = 2))
+
+kronecker(X,Y)
+X %x% Y
 
 # 逆行列
-x.1 <- solve( x )
+x
+x.1 <- solve(x)
 x %*% x.1    
 # 端数が出る場合は丸める
 round (x %*% x.1)
@@ -100,10 +108,10 @@ sweep (x, 1, 1:2, FUN = "+")
 sweep (x, 2, 1:2, FUN = "+")
 
 
-# 行ごとの合計。ただし、rowSums関数が使える
+# 行ごとの合計。ただし、rowSums関数の方が効率的
 apply (x, 1, sum)
 
-# 列ごとの合計。ただし、colSums関数が使える
+# 列ごとの合計。ただし、colSums関数の方が効率的
 apply (x, 2, sum)
 
 
@@ -124,9 +132,14 @@ sapply (x, "+", 1)
 x <- data.frame (x = 1:3, y = 4:6, z = 7:9)
 str (x)
 
+# 行列積が適用できない
+x %*% x
 
 # 行列演算が行えるようにする
 (y <- as.matrix (x))
+
+#  行列演算が適用可能
+y %*% y
 
 is.matrix (y)
 
@@ -160,7 +173,7 @@ unname (x)
   ## ----- SECTION 068  行列の属性を確認する
 (x <- matrix (1:12, nrow = 3, byrow = TRUE))
 
-dim (x)
+dim (x) # 行と列それぞれの次元数
 
 attributes (x)
 
@@ -208,8 +221,9 @@ x
 # 列を抽出
 subset(x, select = 2:3)
 
-
-
+#  subset引数を使うことで柔軟な出力がえられる
+# 合計が10を超える行を取り出す
+subset (x, subset = rowSums(x) > 10)
 
 
 
@@ -239,8 +253,11 @@ rbind (x, y)
 
 rbind (1:3, 4:6)
 
+
+# 列名を明示的に設定した行列
 x <- cbind (c1 = 1:3, c2 = 4:6 )
 x
+
 # 引数がシンボルとして意味があれば列名として利用（deparse.level = 1はデフォルト）
 cbind (x, 4:6, deparse.level = 1)#この場合 4:6 はラベル化されない
 
@@ -278,6 +295,8 @@ str (x)
 # 対角成分を指定
 (x <- diag (1:5))
 
+  # ちなみに行列を指定すると対角成分が使われる
+  diag(matrix(1:9, nrow = 3))
 
 
 
@@ -338,14 +357,19 @@ colSums (x)
 # 周辺和
 addmargins (x)
 
-# 列合計のみ
+# 列合計を行として追加
 addmargins (x, 1)
 
-# 行合計のみ
+# 行合計を列として追加
 addmargins (x, 2)
 # 合計ではなく平均
 addmargins (x, FUN = mean)
 
+# 行と列の範囲を限定して合計を求める
+(x <- matrix (1:9, ncol = 3))
+# mは行数nは列数
+.colSums(x, m = 3, n = 2)
+.rowSums(x, m = 3, n = 2)
 
 
 
@@ -397,9 +421,9 @@ library ( Matrix )
 
 # 0 以外の成分のある行番号を指定
 i <- c (1,3:8)
-# 0 以外の成分のある列番号を指定
+# 0 以外の成分のある列番号を指定（9列目は2回指定）
 j <- c (2,9,6:10)
-# 0 以外の成分をベクトルとして指定（9列目は2回指定）
+# 0 以外の成分をベクトルとして指定
 x <- 1:7
 
 (A <- sparseMatrix (i, j, x = x))
@@ -422,10 +446,8 @@ str (B)
 
   ## ----- SECTION 078 BLAS の導入
 
-sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev
-
-
-./configure --with-blas
+# sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev
+# ./configure --with-blas
 
 # 以下はオプション指定の例です
 # ./configure --with-blas='-L/usr/lib64/atlas -latlas -lptf77blas -lpthrea' --with-lapack='-L/usr/lib64/atlas -llapack -lptcblas'
