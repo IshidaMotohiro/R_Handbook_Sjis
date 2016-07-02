@@ -1,4 +1,4 @@
-# 第3版  2016年 06 月 18 日
+# 第3版  2016年 07 月 02 日
 
 ############################################################
 #                  第６章 データフレーム                   #
@@ -347,18 +347,18 @@ expand.grid (blood = c ("A", "AB", "B", "O"),
                   g = LETTERS [1:3] ))
 
 
-# 単純な列ごとの合計
+# 単純な行ごとの合計
 rowSums (x [, -4])
 
    # 以下 3 行、書籍未記載
    # library (dplyr)
    # x %>% rowwise() %>% summarise(X = sum(x1:x3))# 現行のdplyr バージョン(0.43) では rowwise() は期待通りに動かないこと多いので注意
 
-# 行ごとの合計
+# 列ごとの合計
 colSums (x [, -4])
 x %>% select(-g) %>% summarise_each(funs(sum)) # dplyr の場合
 
-# g列の水準ごとの合計を求める
+# g列の水準ごとの行合計を求める
 rowsum (x [ , -4], group = x$g)
 
 
@@ -384,8 +384,29 @@ sapply (iris [ , -5], mean)
 # 結果をリストで返す
 sapply (iris [ , -5], mean, simplify = FALSE)
 
-# library(dplyr) の場合(出力は省略)
-iris %>% select(-Species) %>% summarise_each(funs(mean))
+# 「dplyr」パッケージ 0.5 以降のバージョンを使う
+library(dplyr) 
+
+# 条件にマッチした列を変更する
+iris %>% mutate_if (is.factor, funs (as.character)) %>% str 
+# 丸める
+iris %>% mutate_if (is.numeric, round, digits = 0) %>% head
+# 二項演算子を適用 (funs で囲む必要がある)
+iris %>% mutate_if (is.numeric, funs(. * 10)) %>% head
+# 無名関数を適用
+ iris %>% group_by (Species) %>% summarise_if (function(x) is.numeric (x) > 0 & max (x) < 1, funs(. * 10)) %>% head
+
+# 条件を設定して要約する
+iris %>% group_by(Species) %>% summarise_each (funs (mean)) 
+
+# 各列に複数の関数を適用する。グループ化で指定された列には要約関数が適用されない
+# この際、変数を指定する(以下では "Petal" で始まる変数に限定している)、また出力の列名も指定できる
+iris %>% group_by (Species) %>% summarise_each (funs (平均値 = mean, 標準偏差 = sd), starts_with ("Petal"))
+
+# 条件にマッチした列だけ処理対象にする(以下では数値列だけを対象としている)
+iris %>% summarise_if (is.numeric, funs (mean, sd))
+
+
 
 #「fivenum」関数は5つの要約統計量を出力する
 vapply (iris [, -5], fivenum,

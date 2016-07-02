@@ -1,4 +1,4 @@
-# 第3版  2016年 06 月 22 日
+# 第3版  2016年 07 月 02 日
 
 
 ############################################################
@@ -222,7 +222,8 @@ aggregate (. ~ Species, data = iris, FUN = fivenum)
 
 ## dplyr パッケージを使う
 library (dplyr)
-iris %>% group_by(Species) %>% summarise_each (funs (mean)) 
+iris %>% group_by(Species) %>% summarise_each (funs (mean)) # 「dplyr」バージョン0.5より前
+iris %>% group_by(Species) %>% summarise_each (funs (mean)) # 「dplyr」バージョン0.5以降
 
 head (chickwts)
 
