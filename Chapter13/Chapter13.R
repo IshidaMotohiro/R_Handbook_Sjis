@@ -1,4 +1,4 @@
-# 第3版  2016年 06 月 22 日
+# 第3版  2016年 12 月 14 日
 
 ############################################################
 #               第13章 多変量グラフィックス                #
@@ -350,7 +350,55 @@ p + geom_histogram() + coord_flip()
 p + geom_histogram() + theme_bw (base_size = 12)
 
 
+## 日本語のための調整
 
+## ggplot2 で日本語を表示させるには、OSそれぞれに用意されたフォントを指定する必要がある。
+## 以下はその一例です。このコードをまとめて実行するとフォントが設定される。
+
+if (.Platform$pkgType == "mac.binary"){
+    quartzFonts(HiraMaru=quartzFont(rep("HiraMaruProN-W4", 4)))
+    theme_set(theme_grey(base_family = "HiraMaru"))
+} else if (.Platform$pkgType == "win.binary"){
+    windowsFonts(JP1=windowsFont("MS Gothic"),JP2=windowsFont("MS Mincho"),JP3=windowsFont("Meiryo"))
+    theme_set(theme_grey(base_family = "JP1"))
+}else {
+     # $ fc-list :lang=ja
+     theme_set(theme_gray(base_size = 12, base_family=""))
+}
+
+
+
+## # 日本語の表示に必要な設定 base_familyの設定
+
+## if (.Platform$pkgType == "mac.binary"){
+##     quartzFonts(HiraMaru=quartzFont(rep("HiraMaruProN-W4", 4)))
+##     theme_set(theme_grey(base_family = "HiraMaru"))
+## } else if (.Platform$pkgType == "win.binary"){
+##     windowsFonts(MEI, windowsFont("Meiryo"))
+##     theme_set(theme_grey(base_family = "MEI"))
+## }else {
+##     # $ fc-list :lang=ja
+##     theme_set(theme_gray(base_size = 12, base_family="TakaoPGothic"))
+## }
+
+## ## ggplot2 の出力調整．ラベルやプロット点などを，書籍やレポートで拡大する方法
+## #####
+oldTheme <- theme_update(
+    axis.title.x = element_text(size = 18, vjust = 0.5), # ｘ軸ラベルサイズ
+    axis.title.y = element_text(size =18, vjust = 0.5, angle = 90),# y軸ラベル
+    legend.text =  element_text(size = 18), # 凡例
+    legend.key.size = grid::unit(3.0, "lines"),
+    legend.title = element_text(face = "bold", size = 18, hjust = 0),
+    axis.text.x = element_text(colour = "grey50", size = 18, vjust = 1,     lineheight = 0.9),#x軸目盛ラベル
+    axis.text.y = element_text(colour = "grey50", size = 18, hjust = 1,  lineheight = 0.9),#y軸目盛ラベル
+    strip.text.x = element_text(size = 18), #ストリップ内の凡例サイズ
+    strip.text.y = element_text(size = 18, angle = -90),
+    plot.title = element_text(size = 22)
+)
+##  元に戻す
+## theme_update (oldTheme)
+
+## なお、これらの設定にも関わらず  geom_text()  などでは、そのつど base_family = "MEI" などを指定する必要がある
 
 
   ## ----- SECTION 203  「rgl」パッケージによる３Dグラフィックス
